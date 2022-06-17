@@ -2,7 +2,7 @@
 Group Members:Chenjie Bei, Yan Wang, Yutong Shang
 
 ## Iteration1 achievement  <br />
-1. We divided the project to two repo: Server and Client <br/>
+1. We divide the project to two repo: Server and Client <br/>
 2. Set up MongoDB and Express <br/>
 3. Front end:  <br/>
 a. we create Pages and components: currently we have 4 pages including a login page, a home page, a storage supply display page and a registration page. <br/>
