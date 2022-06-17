@@ -5,7 +5,7 @@ Group Members:Chenjie Bei, Yan Wang, Yutong Shang
 1. We divide the project to two repo: Server and Client <br/>
 2. Set up MongoDB and Express <br/>
 3. Front end:  <br/>
-a. we create Pages and components: currently we have 4 pages including a login page, a home page, a storage supply display page and a registration page. <br/>
+a. we create Pages and components: currently we have 4 pages including a login page, a home page, a storage supply display page and a registration page. We have login and sign up components <br/>
 b. We set up the routing and link for each page <br/>
 4. Server side:<br/>
 We design and create MongoDB collections. We have mainly two collections: Commodities (products and supplies that will be displayed on webpage) and Users (Suppliers and customers that will use our services)
