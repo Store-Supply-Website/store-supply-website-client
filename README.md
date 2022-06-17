@@ -5,10 +5,10 @@ Group Members:Chenjie Bei, Yan Wang, Yutong Shang
 1. We divided the project to two repo: Server and Client <br/>
 2. Set up MongoDB and Express <br/>
 3. Front end:  <br/>
-we create Pages and components: currently we have 4 pages including a login page, a home page, a storage supply page and a registration page. <br/>
-We set up the routing and link for each page <br/>
+a. we create Pages and components: currently we have 4 pages including a login page, a home page, a storage supply display page and a registration page. <br/>
+b. We set up the routing and link for each page <br/>
 4. Server side:<br/>
-We design and create MongoDB collections. We have mainly two collections: Commodies (products and supplies that will be displayed on webpage) and Users (Suppliers and customers that will use our services)
+We design and create MongoDB collections. We have mainly two collections: Commodities (products and supplies that will be displayed on webpage) and Users (Suppliers and customers that will use our services)
 5. For CRUD, our back end enables CRUD operations. We will implement Create (Register users, and users will be able to create products and supplies), Add (Users add supplies), Delete (Users delete supplies), Edit (Users edit supplies in quantity and description). In iteration2 we will continue working on CRUD functions on home page and storage supply page.
 6. Front end is deployed on Heroku
 
