@@ -2,9 +2,11 @@ import logo from './logo.svg'
 import './App.css'
 
 import Home from './pages/Home'
+//import Home from './pages/test'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Up_Info from './pages/Up_Info'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
 function App () {
   return (
@@ -16,6 +18,7 @@ function App () {
         <Route path='/register' element={<Register />}></Route>
         <Route path='/home' element={<Home />}></Route>
         <Route path='/profile' element={<Profile />}></Route>
+        <Route path='/update' element={<Up_Info />}></Route>
       </Routes>
     </BrowserRouter>
   )
