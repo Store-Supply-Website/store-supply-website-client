@@ -1,13 +1,19 @@
 
 import '../App.css'
+import TitlebarImageList from '../components/CommodityList'
+import { NaviBar } from '../components/NaviBar'
 function Home () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Store Supply Website Home Page
-        </p>
+    <div>
+      <header>
+        <NaviBar></NaviBar>
+
       </header>
+      <article>
+        <div>
+          <TitlebarImageList />
+        </div>
+      </article>
     </div>
   )
 }
