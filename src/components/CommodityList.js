@@ -5,10 +5,14 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
-
+import { useNavigate } from 'react-router-dom'
 export default function TitlebarImageList () {
+  const navigate = useNavigate()
   const handleClick = (e) => {
+
+    navigate('/detail')
     console.log(e.target)
+
   }
   return (
     <ImageList sx={{ width: 800, height: 1100, mx: 30 }}>
