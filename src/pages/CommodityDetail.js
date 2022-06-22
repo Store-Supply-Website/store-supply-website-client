@@ -1,13 +1,19 @@
 import '../App.css'
+import { NaviBar } from '../components/NaviBar'
+import RecipeReviewCard from '../components/CommodityCard'
 function CommodityDetail () {
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Commodity Detail Page
-        </p>
+    <div>
+      <header >
+        <NaviBar></NaviBar>
       </header>
+      <article >
+        <div className='flexbox-centering'>
+          <RecipeReviewCard></RecipeReviewCard>
+        </div>
+
+      </article>
     </div>
   )
 }

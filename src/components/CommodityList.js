@@ -15,7 +15,7 @@ export default function TitlebarImageList () {
 
   }
   return (
-    <ImageList sx={{ width: 800, height: 1100, mx: 30 }}>
+    <ImageList sx={{ width: 0.5, height: 0.8 }}>
       {/* <ImageListItem key="Subheader" cols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem> */}

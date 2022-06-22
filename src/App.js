@@ -6,6 +6,7 @@ import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Detail from './pages/CommodityDetail'
+import Commodity from './pages/Commodity'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
 function App () {
   return (
@@ -18,6 +19,7 @@ function App () {
         <Route path='/home' element={<Home />}></Route>
         <Route path='/profile' element={<Profile />}></Route>
         <Route path='/detail' element={<Detail />}></Route>
+        <Route path='/commodity' element={<Commodity />}></Route>
       </Routes>
     </BrowserRouter>
   )
