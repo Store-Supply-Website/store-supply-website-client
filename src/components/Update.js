@@ -1,29 +1,33 @@
-import React, { UseState }  from 'react'
+import React, { useState } from 'react'
+import { Button } from '@mui/material'
 
-export const Update= ()=> {
+export default function Update () {
 
-    var [name,setName]=UseState()
-    var [address,setAddress]=UseState()
-    var [email,setEmail]=UseState()
-    var [phone,setPhone]=UseState()
-    
-    
-    
-    const nameUpdate=(event)=>{ // Dealing with name field changes to update our state
+    const [name, setName] = useState()
+    const [address, setAddress] = useState()
+    const [email, setEmail] = useState()
+    const [phone, setPhone] = useState()
+
+
+    const nameUpdate = (event) => { // Dealing with name field changes to update our state
+        console.log(event.target.value)
         setName(event.target.value)
     }
-    const addressUpdate=(event)=>{ // Dealing with name field changes to update our state
+    const addressUpdate = (event) => { // Dealing with name field changes to update our state
+        console.log(event.target.value)
         setAddress(event.target.value)
     }
-    const emailUpdate=(event)=>{ // Dealing with name field changes to update our state
+    const emailUpdate = (event) => { // Dealing with name field changes to update our state
+        console.log(event.target.value)
         setEmail(event.target.value)
     }
-    const phoneUpdate=(event)=>{ // Dealing with name field changes to update our state
+    const phoneUpdate = (event) => { // Dealing with name field changes to update our state
+        console.log(event.target.value)
         setPhone(event.target.value)
     }
 
 
-    const handleSubmit=()=> { // Once the form has been submitted, this function will post to the backend
+    const handleSubmit = () => { // Once the form has been submitted, this function will post to the backend
         const postURL = "http://localhost:4000/api/staff/" //Our previously set up route in the backend
         fetch(postURL, {
             method: 'POST',
@@ -34,34 +38,41 @@ export const Update= ()=> {
             body: JSON.stringify({ // We should keep the fields consistent for managing this data later
                 name: name,
                 address: address,
-                email:email,
-                phone:phone
+                email: email,
+                phone: phone
             })
         })
-        .then(()=>{
-            // Once posted, the user will be notified 
-            alert('Change Successfully');
-        })
+            .then(() => {
+                // Once posted, the user will be notified 
+                alert('Change Successfully')
+            })
     }
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
+
                 <label>UserName:</label>
-                <label>Email:</label>
-                <label>Address:</label>
-                <label>Phone:</label>
                 <input required onChange={nameUpdate}></input>
+                <br />
+                <label>Email:</label>
                 <input required onChange={emailUpdate}></input>
+                <br />
+                <label>Address:</label>
                 <input required onChange={addressUpdate}></input>
+                <br />
+                <label>Phone:</label>
                 <input required onChange={phoneUpdate}></input>
-                <button type="submit"> Submit</button>
+                <br />
+                <button variant="contained" > Submit</button>
             </form>
+            <button variant="contained" > Submit</button>
+
         </div>
     )
-    
+
 }
 
-export default Update
+// export default Update
 
 //>
