@@ -1,20 +1,20 @@
-
 import '../App.css'
-import TitlebarImageList from '../components/CommodityList'
 import { NaviBar } from '../components/NaviBar'
-function Home () {
+import RecipeReviewCard from '../components/CommodityCard'
+function CommodityDetail () {
+
   return (
     <div>
-      <header>
+      <header >
         <NaviBar></NaviBar>
-
       </header>
-      <article>
+      <article >
         <div className='flexbox-centering'>
-          <TitlebarImageList />
+          <RecipeReviewCard></RecipeReviewCard>
         </div>
+
       </article>
     </div>
   )
 }
-export default Home
+export default CommodityDetail

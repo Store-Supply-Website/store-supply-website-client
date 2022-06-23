@@ -40,3 +40,11 @@
   background-color: #282c34;
   text-align: center;
 }
+.centerComp {
+  text-align: center;
+}
+.flexbox-centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -13,10 +13,10 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-
 import { LOGIN_URL } from '../utils/api'
 import { useState, useEffect } from "react"
 import Alert from '@mui/material/Alert'
+import { useNavigate } from 'react-router-dom'
 function Copyright (props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -34,6 +34,7 @@ const theme = createTheme()
 
 export default function SignIn () {
   const [isShowInfoAlert, setIsShowInfoAlert] = useState(false)
+  const navigate = useNavigate()
   const handleClickOpen = () => {
     console.log('open')
     setIsShowInfoAlert(true)
@@ -65,6 +66,12 @@ export default function SignIn () {
       const createResponse = await fetch(LOGIN_URL, params)
       const newData = await createResponse.json()
       //process login request response
+      const code = newData['status']
+      if (code === 200) {
+        navigate('/home')
+      } else {
+        alert(newData['message'])
+      }
       console.log(newData)
     }
     catch (e) {
