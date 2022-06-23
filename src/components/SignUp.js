@@ -53,6 +53,12 @@ export default function SignUp () {
       const createResponse = await fetch(Register_URL, params)
       const newData = await createResponse.json()
       //process register request response
+      const code = newData['status']
+      if (code === 200) {
+        alert("Register successfully!")
+      } else {
+        alert(newData['message'])
+      }
       console.log(newData)
     }
     catch (e) {
