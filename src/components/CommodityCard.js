@@ -55,7 +55,7 @@ export default function RecipeReviewCard () {
   }
   return (
     <div className='flexbox-centering'>
-      <Card sx={{ width: 0.35, mt: 2 }}>
+      <Card sx={{ width: 0.5, mt: 2 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -73,12 +73,16 @@ export default function RecipeReviewCard () {
         <CardMedia
           component="img"
           height="194"
-          image="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=248&fit=crop&auto=format"
+          image="https://m.media-amazon.com/images/I/51nZZn3MymL._SX425_.jpg"
           alt="Paella dish"
         />
         <CardContent>
           <Typography variant="h4">
-            Burger
+            (This is static data, we will soon allow users to add goods)
+          </Typography>
+
+          <Typography variant="h4">
+            Mini Camera
           </Typography>
           <Typography paragraph>
           </Typography>
@@ -86,10 +90,16 @@ export default function RecipeReviewCard () {
             About this item:
           </Typography>
           <Typography paragraph>
-            - DISINFECTANT SPRAY KILLS 99.9% OF VIRUSES AND BACTERIA: Lysol Disinfectant Spray is tested and proven to kill 99.9% of viruses and bacteria, including COVID-19/Coronavirus (when used as directed); EPA Reg 777-99​.
+            - Monitor the inside of your home day and night with our 1080P HD indoor plug-in smart security camera with motion detection and two-way audio.
           </Typography>
           <Typography paragraph>
-            - DISINFECTANT SPRAY KILLS 99.9% OF VIRUSES AND BACTERIA: Lysol Disinfectant Spray is tested and proven to kill 99.9% of viruses and bacteria, including COVID-19/Coronavirus (when used as directed); EPA Reg 777-99​.
+            - See, hear, and speak to people and pets in your home from your smartphone with Blink Mini’s live view and two-way audio.
+          </Typography>
+          <Typography paragraph>
+            - Get alerts on your smartphone whenever motion is detected or customize motion detection zones so you can see what matters most.
+          </Typography>
+          <Typography paragraph>
+            - Use Mini as an indoor plug-in chime for Blink Video Doorbell. Hear a real-time alert from Mini when someone presses your Video Doorbell.
           </Typography>
           <Typography paragraph>
           </Typography>
@@ -100,23 +110,15 @@ export default function RecipeReviewCard () {
             123-456-789
           </Typography>
         </CardContent>
-        <CardActions disableSpacing>
+        {/* <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleAlertClick}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share" onClick={handleEdit}>
             <ShareIcon />
           </IconButton>
-          {/* <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-
-        >
-          <ExpandMoreIcon />
-        </ExpandMore> */}
-        </CardActions>
+          
+        </CardActions> */}
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Method:</Typography>
