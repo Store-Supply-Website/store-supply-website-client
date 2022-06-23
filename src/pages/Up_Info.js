@@ -2,14 +2,11 @@ import '../App.css'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 import Update from '../components/Update'
-function Up_Info() {
+function Up_Info () {
 
   return (
     <div className="App">
-      <header className>
-        {/* <p>
-          Store Supply Website Login Page
-        </p> */}
+      <header className="login">
         <Update></Update>
       </header>
     </div>
