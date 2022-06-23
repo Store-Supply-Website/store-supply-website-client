@@ -15,7 +15,7 @@ export const NaviBar = () => {
           <Button color='inherit' component={Link} to="/home">Home</Button>
           <Button color='inherit' component={Link} to="/profile">Profile</Button>
           <Button color='inherit' component={Link} to="/commodity">commodity</Button>
-          <Button color='inherit' component={Link} to="/">login</Button>
+          <Button color='inherit' component={Link} to="/">Logout</Button>
         </Stack>
       </Toolbar>
     </AppBar>
