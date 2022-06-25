@@ -5,15 +5,6 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
-
-//Diff from merge YT branch TBD
-// export default function TitlebarImageList () {
-//   const handleClick = (e) => {
-//     console.log(e.target)
-//   }
-//   return (
-//     <ImageList sx={{ width: 800, height: 1100, mx: 30 }}>
-
 import { useNavigate } from 'react-router-dom'
 export default function TitlebarImageList () {
   const navigate = useNavigate()
@@ -128,3 +119,4 @@ const itemData = [
     author: '@southside_customs',
     cols: 2,
   },
+]
