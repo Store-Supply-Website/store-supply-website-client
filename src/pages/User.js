@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import NaviBar from '../components/NaviBar'
+import { NaviBar } from '../components/NaviBar'
 import TitlebarImageList from '../components/CommodityList'
 import { Tabs, Tab, Grid, Paper, Button } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'

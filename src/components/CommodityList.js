@@ -128,3 +128,4 @@ const itemData = [
     author: '@southside_customs',
     cols: 2,
   },
+]

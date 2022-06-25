@@ -134,7 +134,7 @@ import Input from '@mui/material/Input'
 import { useForm, Controller } from "react-hook-form"
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
 import "react-phone-number-input/style.css"
-import NaviBar from './NaviBar'
+import { NaviBar } from './NaviBar'
 import CommodityList from './CommodityList'
 import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
