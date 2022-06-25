@@ -6,10 +6,7 @@ function Login () {
 
   return (
     <div className="App">
-      <header className>
-        {/* <p>
-          Store Supply Website Login Page
-        </p> */}
+      <header>
         <SignIn></SignIn>
       </header>
     </div>

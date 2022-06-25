@@ -1,8 +1,7 @@
-
 import '../App.css'
 import TitlebarImageList from '../components/CommodityList'
 import { NaviBar } from '../components/NaviBar'
-function Home () {
+function Commodity () {
   return (
     <div>
       <header>
@@ -13,8 +12,9 @@ function Home () {
         <div className='flexbox-centering'>
           <TitlebarImageList />
         </div>
+
       </article>
     </div>
   )
 }
-export default Home
+export default Commodity

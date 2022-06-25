@@ -8,6 +8,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Up_Info from './pages/Up_Info'
 import User from './pages/User'
+import Detail from './pages/CommodityDetail'
+import Commodity from './pages/Commodity'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
 function App () {
   return (
@@ -22,7 +24,8 @@ function App () {
         <Route path='/profile' element={<Profile />}></Route>
         <Route path='/update' element={<Up_Info />}></Route>
         <Route path='/user' element={<User />}></Route>
-
+        <Route path='/detail' element={<Detail />}></Route>
+        <Route path='/commodity' element={<Commodity />}></Route>
       </Routes>
     </BrowserRouter>
   )
