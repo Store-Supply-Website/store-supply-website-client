@@ -15,9 +15,15 @@ import InfoIcon from '@mui/icons-material/Info'
 //     <ImageList sx={{ width: 800, height: 1100, mx: 30 }}>
 
 import { useNavigate } from 'react-router-dom'
+import { StoreContext } from '../context/context'
+import { useState, useEffect, useContext } from "react"
 export default function TitlebarImageList () {
   const navigate = useNavigate()
+  const { user } = useContext(StoreContext)
   const handleClick = (e) => {
+
+    //test user info
+    console.log(user)
 
     navigate('/commodity/detail/101')
     console.log(e.target)

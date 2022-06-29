@@ -14,9 +14,10 @@ import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { LOGIN_URL, TEST_URL } from '../utils/api'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Alert from '@mui/material/Alert'
 import { useNavigate } from 'react-router-dom'
+import { StoreContext } from '../context/context.js'
 function Copyright (props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -34,6 +35,8 @@ const theme = createTheme()
 
 export default function SignIn () {
   const [isShowInfoAlert, setIsShowInfoAlert] = useState(false)
+  //get context
+  const { user, setUser } = useContext(StoreContext)
   const navigate = useNavigate()
   const handleClickOpen = () => {
     console.log('open')
@@ -75,12 +78,15 @@ export default function SignIn () {
       const newData = await createResponse.json()
       //process login request response
       const code = newData['status']
+      console.log(newData)
       if (code === 200) {
+        // console.log(user)
+        setUser(newData['data'])
+        console.log(user)
         navigate('/home')
       } else {
         alert(newData['message'])
       }
-      console.log(newData)
     }
     catch (e) {
       console.log(e)
