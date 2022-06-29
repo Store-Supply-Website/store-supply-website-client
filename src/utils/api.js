@@ -10,3 +10,7 @@ export const Home_URL = BASE_URL + '/home'
 export const Profile_URL = BASE_URL + '/profile'
 // Register.js
 export const Register_URL = BASE_URL + '/register'
+//test
+export const TEST_URL = BASE_URL
+//commodity
+export const DElETE_URL = BASE_URL + '/commodity' + '/delete'
