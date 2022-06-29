@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import { LOGIN_URL } from '../utils/api'
+import { LOGIN_URL, TEST_URL } from '../utils/api'
 import { useState, useEffect } from "react"
 import Alert from '@mui/material/Alert'
 import { useNavigate } from 'react-router-dom'
@@ -55,8 +55,16 @@ export default function SignIn () {
     return true
   }
   const SendLoginRequest = async (loginData) => {
-
+    // try {
+    //   const response = await fetch(TEST_URL)
+    //   // const data = await response.json()
+    //   console.log(response)
+    // }
+    // catch (e) {
+    //   console.log(e)
+    // }
     try {
+
       //build post request params
       const params = {
         method: 'POST',
@@ -87,6 +95,7 @@ export default function SignIn () {
       email: data.get('email'),
       password: data.get('password'),
     })
+
     if (!isValidInfo(data)) {
       handleClickOpen()
       return

@@ -10,13 +10,13 @@ export default function TitlebarImageList () {
   const navigate = useNavigate()
   const handleClick = (e) => {
 
-    navigate('/detail')
+    navigate('/commodity/detail/101')
     console.log(e.target)
 
   }
   return (
     <ImageList sx={{ width: 0.5, height: 0.8 }}>
-      {/* <ImageListItem key="Subheader" cols={2}>
+      {/* <ImageListItem key="Subheader" c[]\ols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem> */}
 
