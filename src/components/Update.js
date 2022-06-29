@@ -118,7 +118,7 @@
 
 // export default Update
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import FormControlLabel from "@mui/material/FormControlLabel"
@@ -139,6 +139,9 @@ import CommodityList from './CommodityList'
 import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
+import { useNavigate } from 'react-router-dom'
+import { Register_URL } from '../utils/api'
+
 
 const defaultValues = {
     userName: "",
@@ -158,15 +161,24 @@ const Update = () => {
             [name]: value,
         })
     }
-    // const handleSliderChange = (name) => (e, value) => {
-    //     setFormValues({
-    //         ...formValues,
-    //         [name]: value,
-    //     })
-    // }
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log(formValues)
+        const data = new FormData(event.currentTarget)
+        console.log({
+            userName: data.get('userName'),
+            phone: data.get('phone'),
+            address: data.get('address'),
+
+        })
+
+        // if (!isValidInfo(data)) {
+        //     handleClickOpen()
+        //     return
+        // }
+        //SendRegisterRequest(data)
+        console.log(Register_URL)
+        getAllUser()
     }
 
     const styles = {
@@ -174,6 +186,55 @@ const Update = () => {
             marginTop: 1.0
         }
     }
+
+    const navigate = useNavigate()
+    const SendRegisterRequest = async (registerData) => {
+        try {
+            //build post request params
+            const params = {
+                method: 'POST',
+                body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
+                headers: { 'Content-Type': 'application/json' },
+            }
+            const createResponse = await fetch(Register_URL, params)
+            const newData = await createResponse.json()
+            //process register request response
+            const code = newData['status']
+            if (code === 200) {
+                alert("Register successfully!")
+            } else {
+                alert(newData['message'])
+            }
+            console.log(newData)
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+
+    const getAllUser = async () => {
+        const data = { phone: 'z z' }
+        // const params = {
+        //     method: 'GET',
+        //     body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
+        //     headers: { 'Content-Type': 'application/json' },
+        // }
+        // const createResponse = await fetch(Register_URL + '?username=${encodeURIComponent(data.userName)}', { method: 'GET' })
+        const createResponse = await fetch('https://cs5610project.herokuapp.com', { method: 'GET' })
+        console.log(await createResponse)
+        // const newData = await createResponse.json()
+    }
+    // const getAllUser = async () => {
+    //     const response = await fetch("/get")
+    //     response.json().then((res) => setUsers(res.data.userName))
+    //     console.log(userName)
+    // }
+
+    useEffect(() => {
+        getAllUser()
+    }, [])
 
     return (
         <>
@@ -220,103 +281,15 @@ const Update = () => {
                             onChange={handleInputChange}
                         />
                     </Grid>
-
-
-                    {/* <Grid item>
-                    <TextField
-                        id="age-input"
-                        name="age"
-                        label="Age"
-                        type="text"
-                        value={formValues.age}
-                        onChange={handleInputChange}
-                    />
-                </Grid>
-                <Grid item>
-                    <FormControl>
-                        <FormLabel>Gender</FormLabel>
-                        <RadioGroup
-                            name="gender"
-                            value={formValues.gender}
-                            onChange={handleInputChange}
-                            row
-                        >
-                            <FormControlLabel
-                                key="male"
-                                value="male"
-                                control={<Radio size="small" />}
-                                label="Male"
-                            />
-                            <FormControlLabel
-                                key="female"
-                                value="female"
-                                control={<Radio size="small" />}
-                                label="Female"
-                            />
-                            <FormControlLabel
-                                key="other"
-                                value="other"
-                                control={<Radio size="small" />}
-                                label="Other"
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                </Grid>
-                <Grid item>
-                    <FormControl>
-                        <Select
-                            name="os"
-                            value={formValues.os}
-                            onChange={handleInputChange}
-                        >
-                            <MenuItem key="mac" value="mac">
-                                Mac
-                            </MenuItem>
-                            <MenuItem key="windows" value="windows">
-                                Windows
-                            </MenuItem>
-                            <MenuItem key="linux " value="linux">
-                                Linux
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item>
-                    <div style={{ width: "400px" }}>
-                        Favorite Number
-                        <Slider
-                            value={formValues.favoriteNumber}
-                            onChange={handleSliderChange("favoriteNumber")}
-                            defaultValue={1}
-                            step={1}
-                            min={1}
-                            max={3}
-                            marks={[
-                                {
-                                    value: 1,
-                                    label: "1",
-                                },
-                                {
-                                    value: 2,
-                                    label: "2",
-                                },
-                                {
-                                    value: 3,
-                                    label: "3",
-                                },
-                            ]}
-                            valueLabelDisplay="off"
-                        />
-                    </div>
-                </Grid> */}
-
-                    <Button variant="contained" color="primary" type="submit">
+                    <Button variant="contained" color="primary" type="submit"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
                         Submit
                     </Button>
                 </Grid>
             </form>
-            <Phone>
 
+            <Phone>
             </Phone>
 
         </>
