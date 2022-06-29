@@ -6,9 +6,15 @@ import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
 import { useNavigate } from 'react-router-dom'
+import { StoreContext } from '../context/context'
+import { useState, useEffect, useContext } from "react"
 export default function TitlebarImageList () {
   const navigate = useNavigate()
+  const { user } = useContext(StoreContext)
   const handleClick = (e) => {
+
+    //test user info
+    console.log(user)
 
     navigate('/commodity/detail/101')
     console.log(e.target)
