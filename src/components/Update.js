@@ -118,7 +118,7 @@
 
 // export default Update
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import FormControlLabel from "@mui/material/FormControlLabel"
@@ -141,7 +141,7 @@ import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
 import { Register_URL, UPDATE_URL, LOGIN_URL } from '../utils/api'
-import { storeContext } from '../context/context'
+import { StoreContext } from '../context/context'
 
 const defaultValues = {
     userName: "",
@@ -150,6 +150,9 @@ const defaultValues = {
     email: ""
 }
 const Update = () => {
+    const { user, setUser } = useContext(StoreContext)
+    console.log('kkk')
+    console.log(user)
     const [formValues, setFormValues] = useState(defaultValues)
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -175,9 +178,7 @@ const Update = () => {
         // }
         //SendRegisterRequest(data)
         console.log(UPDATE_URL)
-        console.log('kkk')
-        console.log(user)
-        // SendRegisterRequest(data)
+        SendRegisterRequest(data)
         // getAllUser()
     }
 
@@ -189,7 +190,6 @@ const Update = () => {
 
     const navigate = useNavigate()
     const SendRegisterRequest = async (LoginData) => {
-        const { user } = useContext(StoreContext)
 
         try {
             //build post request params

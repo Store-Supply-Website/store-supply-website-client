@@ -80,9 +80,10 @@ export default function SignIn () {
       const code = newData['status']
       console.log(newData)
       if (code === 200) {
-        // console.log(user)
-        setUser(newData['data'])
+        console.log('k')
         console.log(user)
+        setUser(newData['data'])
+        // console.log(user)
         navigate('/home')
       } else {
         alert(newData['message'])
