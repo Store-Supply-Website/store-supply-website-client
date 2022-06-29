@@ -11,6 +11,7 @@ import User from './pages/User'
 import Detail from './pages/CommodityDetail'
 import Commodity from './pages/Commodity'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
+import SignIn from './components/SignIn'
 function App () {
   return (
     <BrowserRouter>
@@ -27,6 +28,7 @@ function App () {
         <Route path='/user' element={<User />}></Route>
         <Route path='/detail' element={<Detail />}></Route>
         <Route path='/commodity' element={<Commodity />}></Route>
+        <Route path='/signin' element={<SignIn />}></Route>
 
       </Routes>
     </BrowserRouter>

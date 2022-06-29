@@ -14,3 +14,5 @@ export const Register_URL = BASE_URL + '/register'
 export const TEST_URL = BASE_URL
 //commodity
 export const DElETE_URL = BASE_URL + '/commodity' + '/delete'
+//update
+export const UPDATE_URL = BASE_URL + '/catalog' + '/supplier/update'
