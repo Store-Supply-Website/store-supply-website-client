@@ -187,13 +187,13 @@ export default function RecipeReviewCard () {
           //     <MoreVertIcon />
           //   </IconButton>
           // }
-          title="Shrimp and Chorizo Paella"
+          title="helloimnik"
           subheader="September 14, 2016"
         />
         <CardMedia
           component="img"
           height="194"
-          image="https://m.media-amazon.com/images/I/51nZZn3MymL._SX425_.jpg"
+          image="https://images.unsplash.com/photo-1522770179533-24471fcdba45"
           alt="Paella dish"
         />
         <CardContent>
@@ -202,7 +202,7 @@ export default function RecipeReviewCard () {
           </Typography> */}
 
           <Typography variant="h4">
-            Mini Camera
+            Camera
           </Typography>
           {/* <Typography variant="h4">
             {curTitle}
