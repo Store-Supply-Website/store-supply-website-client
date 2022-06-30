@@ -208,7 +208,7 @@ const Update = () => {
             if (code === 200) {
                 console.log("test1")
                 alert("Update successfully!")
-                // navigate('/user')
+                navigate('/user')
 
             } else {
                 alert(newData['message'])
