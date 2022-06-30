@@ -18,7 +18,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import { Register_URL, UPDATE_URL, LOGIN_URL, SEARCH_URL } from '../utils/api'
 
+
+
 function User () {
+  const [phoneNum, setPhoneNum] = useState()
+  const [address, setAddress] = useState()
+
   console.log('hi')
   console.log(sessionStorage)
   const curUser = sessionStorage.getItem('user')
@@ -33,30 +38,23 @@ function User () {
       padding: 30
     }
   }
-
   const SendRegisterRequest = async (LoginData) => {
     const curUser = sessionStorage.getItem('user')
     const curUserObj = JSON.parse(curUser)
     const curId = curUserObj._id
     console.log(curId)
     try {
-      //build post request params
-      const params = {
-        method: 'GET',
-        body: JSON.stringify({ id: curId }),
-        // headers: { 'Content-Type': 'application/json' }
-      }
-      console.log("hiiiii")
-      console.log(SEARCH_URL + curId)
-      const createResponse = await fetch(SEARCH_URL + curId, params)
+      const createResponse = await fetch(SEARCH_URL + '/' + curId)
       const newData = await createResponse.json()
       //process register request response
       const code = newData['status']
+      console.log("test1")
       if (code === 200) {
         console.log("test1")
-        alert("fetch successfully!")
-        // navigate('/user')
-
+        console.log(newData.data.address)
+        console.log("test2")
+        setPhoneNum(newData.data.phone)
+        setAddress(newData.data.address)
       } else {
         alert(newData['message'])
       }
@@ -66,6 +64,7 @@ function User () {
       console.log(e)
     }
   }
+
   SendRegisterRequest()
 
   return (
@@ -99,13 +98,13 @@ function User () {
               Phone
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {curUserObj.phone}
+              {phoneNum}
             </Typography>
             <Typography variant="body2" gutterBottom>
               Address
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {curUserObj.address}
+              {address}
             </Typography>
           </Grid>
 
