@@ -10,7 +10,8 @@ const StoreProvider = ({ children }) => {
   const [id, setUserId] = useState()
   const [name, setName] = useState()
   const [user, setUser] = useState()
-  return <StoreContext.Provider value={{ isAuthenticated, setIsAuthenticated, type, setType, token, setToken, id, setUserId, name, setName, user, setUser }}>
+  const [loginUser, setLoginUser] = useState()
+  return <StoreContext.Provider value={{ isAuthenticated, setIsAuthenticated, type, setType, token, setToken, id, setUserId, name, setName, user, setUser, loginUser, setLoginUser }}>
     {children}
   </StoreContext.Provider>
 }

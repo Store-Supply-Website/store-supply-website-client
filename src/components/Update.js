@@ -140,6 +140,7 @@ import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from "react"
 import { Register_URL, UPDATE_URL, LOGIN_URL } from '../utils/api'
 import { StoreContext } from '../context/context'
 
@@ -154,6 +155,7 @@ const Update = () => {
     // console.log('kkk')
     // console.log(user)
     const [formValues, setFormValues] = useState(defaultValues)
+    const curUser = JSON.parse(sessionStorage.getItem("user"))
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormValues({
@@ -166,6 +168,7 @@ const Update = () => {
         console.log('kkk')
         console.log(user)
         event.preventDefault()
+        console.log(curUser)
         const data = new FormData(event.currentTarget)
         console.log({
             userName: data.get('userName'),
