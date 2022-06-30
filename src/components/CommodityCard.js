@@ -103,7 +103,7 @@ export default function RecipeReviewCard () {
         />
         <CardContent>
           <Typography variant="h4">
-            (This is static data, we will soon allow users to add goods)
+            Commodity Details
           </Typography>
 
           <Typography variant="h4">
