@@ -17,10 +17,83 @@ import InfoIcon from '@mui/icons-material/Info'
 import { useNavigate } from 'react-router-dom'
 import { StoreContext } from '../context/context'
 import { useState, useEffect, useContext } from "react"
+import { Home_COMMODITY_URL, Home_MYCOMMODITY_URL } from '../utils/api'
 export default function TitlebarImageList () {
   const navigate = useNavigate()
   const { user } = useContext(StoreContext)
+  useEffect(() => {
+    async function SendCommodityRequest () {
+
+      try {
+
+        const response = await fetch(Home_COMMODITY_URL)
+        const newData = await response.json()
+        //process register request response
+        const code = newData['status']
+        if (code === 200) {
+          alert("Show commodity successfully!")
+          console.log(newData)
+        } else {
+          alert(newData['message'])
+        }
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    SendCommodityRequest()
+  }, [])
   const curUser = JSON.parse(sessionStorage.getItem("user"))
+
+  const SendMyCommodityRequest = async (Data) => {
+    // supplier:req.body.user,
+    // commodityname:req.body.commodityname,
+    // content:req.body.content
+
+    try {
+      //build post request params
+      const params = {
+        method: 'POST',
+        body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
+        headers: { 'Content-Type': 'application/json' },
+      }
+      const createResponse = await fetch(Home_MYCOMMODITY_URL, params)
+      const newData = await createResponse.json()
+      //process register request response
+      const code = newData['status']
+      if (code === 200) {
+        alert("get commodity successfully!")
+        console.log(newData)
+      } else {
+        alert(newData['message'])
+      }
+
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+  // const SendCommodityRequest = async () => {
+
+  //   try {
+
+  //     const response = await fetch(Home_COMMODITY_URL)
+  //     const newData = await response.json()
+  //     //process register request response
+  //     const code = newData['status']
+  //     if (code === 200) {
+  //       alert("Create commodity successfully!")
+  //       console.log(newData)
+  //     } else {
+  //       alert(newData['message'])
+  //     }
+
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+  // }
   const handleClick = (e) => {
 
     //test user info

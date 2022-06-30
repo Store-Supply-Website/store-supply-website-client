@@ -10,9 +10,13 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import CommodityEditText from '../components/CommodityEditText'
 import { CREATE_COMMODITY_URL } from '../utils/api'
+import { useRef } from 'react'
 function MyCommodity () {
-
+  const childRef = useRef()
+  const [title, setTitle] = React.useState("")
+  const [content, setContent] = React.useState("")
   const [isShowAdd, setIsShowAdd] = React.useState(false)
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
   const handleAddFormClick = () => {
     // alert('Click')
     setIsShowAdd(true)
@@ -20,11 +24,15 @@ function MyCommodity () {
   const handleAddFormSubmit = () => {
     // alert('Submit')
     setIsShowAdd(false)
-    const title = document.getElementById('Commodity_EditText')
-    const content = document.getElementById('Commodity_EditText')
+
+    const data = { user: curUser, commodityname: title, content: content }
     console.log(title)
+    console.log(content)
     // console.log(content.value)
-    SendAddCommodityRequest()
+    console.log(data['user'])
+    console.log(data['commodityname'])
+    console.log(data['content'])
+    SendAddCommodityRequest(data)
   }
 
   const handleAddFormClose = () => {
@@ -35,11 +43,12 @@ function MyCommodity () {
     // supplier:req.body.user,
     // commodityname:req.body.commodityname,
     // content:req.body.content
+
     try {
       //build post request params
       const params = {
         method: 'POST',
-        body: JSON.stringify({ user: Data.get('user'), commodityname: Data.get('commodityname'), content: Data.get('content') }),
+        body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
         headers: { 'Content-Type': 'application/json' },
       }
       const createResponse = await fetch(CREATE_COMMODITY_URL, params)
@@ -83,7 +92,7 @@ function MyCommodity () {
             {"Edit Commodity"}
           </DialogTitle>
           <DialogContent>
-            <CommodityEditText id="Commodity_EditText"></CommodityEditText>
+            <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} ></CommodityEditText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleAddFormClose}>Cancel</Button>

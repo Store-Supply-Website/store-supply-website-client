@@ -23,6 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import CommodityEditText from './CommodityEditText'
 import { useSearchParams, useParams } from 'react-router-dom'
+import { DElETE_COMMODITY_URL, UPDATE_COMMODITY_URL } from '../utils/api'
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -38,9 +39,15 @@ export default function RecipeReviewCard () {
   const [expanded, setExpanded] = React.useState(false)
   const [isShowAlert, setIsShowAlert] = React.useState(false)
   const [isShowEdit, setIsShowEdit] = React.useState(false)
+
+  const [title, setTitle] = React.useState("")
+  const [content, setContent] = React.useState("")
+  const [isShowAdd, setIsShowAdd] = React.useState(false)
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
   let params = useParams()
   let id = params.id
   const handleAlertClick = () => {
+
     setIsShowAlert(true)
   }
 
@@ -54,23 +61,75 @@ export default function RecipeReviewCard () {
   const handleEditClose = () => {
     setIsShowEdit(false)
   }
-  // const SendDeleteRequest = async () => {
-  //   try {
-  //     const response = await fetch(TEST_URL)
-  //     const data = await response.json()
-  //     console.log(response)
-  //   }
-  //   catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  const handleEditFormSubmit = () => {
+    // alert('Submit')
+    setIsShowEdit(false)
+
+    const data = { id: '62bd34d081080d1c554bfb08', commodityname: title, content: content }
+    console.log(title)
+    console.log(content)
+    // console.log(content.value)
+    console.log(data['user'])
+    console.log(data['commodityname'])
+    console.log(data['content'])
+    SendEditCommodityRequest(data)
+  }
+  const SendEditCommodityRequest = async (Data) => {
+    console.log('Send')
+    try {
+      //build post request params
+      const params = {
+        method: 'POST',
+        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'] }),
+        headers: { 'Content-Type': 'application/json' },
+      }
+      const createResponse = await fetch(UPDATE_COMMODITY_URL, params)
+      const newData = await createResponse.json()
+      //process register request response
+      const code = newData['status']
+      if (code === 200) {
+        alert("Create commodity successfully!")
+
+      } else {
+        alert(newData['message'])
+      }
+      console.log(newData)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+  const SendDeleteRequest = async (commodityID) => {
+    try {
+      //build post request params
+      const params = {
+        method: 'POST',
+        body: JSON.stringify({ id: commodityID }),
+        headers: { 'Content-Type': 'application/json' },
+      }
+      const createResponse = await fetch(DElETE_COMMODITY_URL, params)
+      const newData = await createResponse.json()
+      //process register request response
+      const code = newData['status']
+      if (code === 200) {
+        alert("Delete commodity successfully!")
+
+      } else {
+        alert(newData['message'])
+      }
+      console.log(newData)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
   const handleDelete = (e) => {
     setIsShowAlert(false)
-    console.log(id)
-    // SendDeleteRequest()
+    console.log('62bd34f781080d1c554bfb0c')
+    SendDeleteRequest('62bd34f781080d1c554bfb0c')
     console.log('Delete')
 
   }
@@ -206,11 +265,11 @@ export default function RecipeReviewCard () {
           {"Edit Commodity"}
         </DialogTitle>
         <DialogContent>
-          <CommodityEditText></CommodityEditText>
+          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} ></CommodityEditText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
-          <Button onClick={handleEditClose} autoFocus>
+          <Button onClick={handleEditFormSubmit} autoFocus>
             Confirm
           </Button>
         </DialogActions>
