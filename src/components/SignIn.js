@@ -36,7 +36,8 @@ const theme = createTheme()
 export default function SignIn () {
   const [isShowInfoAlert, setIsShowInfoAlert] = useState(false)
   //get context
-  const { user, setUser } = useContext(StoreContext)
+  const { user, setUser, loginUser, setLoginUser } = useContext(StoreContext)
+
   const navigate = useNavigate()
   const handleClickOpen = () => {
     console.log('open')
@@ -80,8 +81,11 @@ export default function SignIn () {
       const code = newData['status']
       console.log(newData)
       if (code === 200) {
-        // console.log(user)
+        console.log(user)
+        const curUser = newData['data']
+        sessionStorage.setItem('user', JSON.stringify(curUser))
         setUser(newData['data'])
+        setLoginUser(newData['data'])
         console.log(user)
         navigate('/home')
       } else {

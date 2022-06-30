@@ -15,8 +15,8 @@ export const NaviBar = () => {
         <Stack direction='row' spacing={2}>
           <Button color='inherit' component={Link} to="/home">Home</Button>
           <Button color='inherit' component={Link} to="/profile">Profile</Button>
-
-          <Button color='inherit' component={Link} to="/commodity">commodity</Button>
+          <Button color='inherit' component={Link} to="/mycommodity">My Commodity</Button>
+          <Button color='inherit' component={Link} to="/commodity">Commodity</Button>
           <Button color='inherit' component={Link} to="/">Logout</Button>
         </Stack>
       </Toolbar>

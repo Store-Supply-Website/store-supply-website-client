@@ -141,7 +141,8 @@ import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
 import { Register_URL } from '../utils/api'
-
+import { StoreContext } from '../context/context'
+import { useContext } from "react"
 
 const defaultValues = {
     userName: "",
@@ -154,6 +155,7 @@ const defaultValues = {
 }
 const Update = () => {
     const [formValues, setFormValues] = useState(defaultValues)
+    const curUser = JSON.parse(sessionStorage.getItem("user"))
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormValues({
@@ -164,6 +166,7 @@ const Update = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
+        console.log(curUser)
         const data = new FormData(event.currentTarget)
         console.log({
             userName: data.get('userName'),

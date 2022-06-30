@@ -20,10 +20,11 @@ import { useState, useEffect, useContext } from "react"
 export default function TitlebarImageList () {
   const navigate = useNavigate()
   const { user } = useContext(StoreContext)
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
   const handleClick = (e) => {
 
     //test user info
-    console.log(user)
+    console.log(curUser)
 
     navigate('/commodity/detail/101')
     console.log(e.target)

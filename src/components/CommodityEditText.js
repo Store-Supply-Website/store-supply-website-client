@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField"
 import Stack from "@mui/material/Stack"
 import Button from "@mui/material/Button"
 import CommodityImageCard from "./CmomodityImageCard"
+// const CommodityEditText = React.forwardRef(())
 export default function CommodityEditText () {
   const [value, setValue] = React.useState("")
 
@@ -22,7 +23,7 @@ export default function CommodityEditText () {
     >
       <div>
         <TextField
-          id="filled-multiline-flexible"
+          id="Commodity_EditText_Title"
           label="Title"
           multiline
           maxRows={4}
@@ -33,7 +34,7 @@ export default function CommodityEditText () {
       </div>
       <div>
         <TextField
-          id="filled-multiline-static"
+          id="Commodity_EditText_Content"
           label="Description"
           multiline
           rows={4}
