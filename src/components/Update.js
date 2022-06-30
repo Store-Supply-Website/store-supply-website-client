@@ -140,7 +140,6 @@ import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
-import { useContext } from "react"
 import { Register_URL, UPDATE_URL, LOGIN_URL } from '../utils/api'
 import { StoreContext } from '../context/context'
 
@@ -152,8 +151,6 @@ const defaultValues = {
 }
 const Update = () => {
     const { user, setUser } = useContext(StoreContext)
-    // console.log('kkk')
-    // console.log(user)
     const [formValues, setFormValues] = useState(defaultValues)
     const curUser = JSON.parse(sessionStorage.getItem("user"))
     const handleInputChange = (e) => {
@@ -165,10 +162,7 @@ const Update = () => {
     }
 
     const handleSubmit = (event) => {
-        console.log('kkk')
-        console.log(user)
         event.preventDefault()
-        console.log(curUser)
         const data = new FormData(event.currentTarget)
         console.log({
             userName: data.get('userName'),
@@ -195,21 +189,27 @@ const Update = () => {
 
     const navigate = useNavigate()
     const SendRegisterRequest = async (LoginData) => {
-
+        const curUser = sessionStorage.getItem('user')
+        const curUserObj = JSON.parse(curUser)
+        const curId = curUserObj._id
+        console.log(curId)
         try {
             //build post request params
             const params = {
                 method: 'POST',
-                body: JSON.stringify({ id: LoginData.get('address') }),
+                body: JSON.stringify({ id: curId, address: LoginData.get('address'), phone: LoginData.get('phone') }),
                 headers: { 'Content-Type': 'application/json' },
             }
+
             const createResponse = await fetch(UPDATE_URL, params)
             const newData = await createResponse.json()
             //process register request response
             const code = newData['status']
             if (code === 200) {
                 console.log("test1")
-                alert("Register successfully!")
+                alert("Update successfully!")
+                // navigate('/user')
+
             } else {
                 alert(newData['message'])
             }
@@ -220,29 +220,6 @@ const Update = () => {
         }
     }
 
-    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-
-    const getAllUser = async () => {
-        const data = { phone: 'z z' }
-        // const params = {
-        //     method: 'GET',
-        //     body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
-        //     headers: { 'Content-Type': 'application/json' },
-        // }
-        // const createResponse = await fetch(Register_URL + '?username=${encodeURIComponent(data.userName)}', { method: 'GET' })
-        const createResponse = await fetch('https://cs5610project.herokuapp.com', { method: 'GET' })
-        console.log(await createResponse)
-        // const newData = await createResponse.json()
-    }
-    // const getAllUser = async () => {
-    //     const response = await fetch("/get")
-    //     response.json().then((res) => setUsers(res.data.userName))
-    //     console.log(userName)
-    // }
-
-    useEffect(() => {
-        getAllUser()
-    }, [])
 
     return (
         <>
@@ -271,16 +248,6 @@ const Update = () => {
                     </Grid>
                     <Grid item>
                         <TextField
-                            id="phone-input"
-                            name="phone"
-                            label="phone"
-                            type="text"
-                        >
-                            <Phone></Phone>
-                        </TextField>
-                    </Grid>
-                    <Grid item>
-                        <TextField
                             id="address-input"
                             name="address"
                             label="address"
@@ -297,8 +264,6 @@ const Update = () => {
                 </Grid>
             </form>
 
-            <Phone>
-            </Phone>
 
         </>
 
