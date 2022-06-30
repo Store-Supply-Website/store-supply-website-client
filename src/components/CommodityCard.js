@@ -21,6 +21,8 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
+import CommodityEditText from './CommodityEditText'
+import { useSearchParams, useParams } from 'react-router-dom'
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -35,7 +37,9 @@ const ExpandMore = styled((props) => {
 export default function RecipeReviewCard () {
   const [expanded, setExpanded] = React.useState(false)
   const [isShowAlert, setIsShowAlert] = React.useState(false)
-
+  const [isShowEdit, setIsShowEdit] = React.useState(false)
+  let params = useParams()
+  let id = params.id
   const handleAlertClick = () => {
     setIsShowAlert(true)
   }
@@ -43,14 +47,35 @@ export default function RecipeReviewCard () {
   const handleAlertClose = () => {
     setIsShowAlert(false)
   }
+  const handleEditClick = () => {
+    setIsShowEdit(true)
+  }
+
+  const handleEditClose = () => {
+    setIsShowEdit(false)
+  }
+  // const SendDeleteRequest = async () => {
+  //   try {
+  //     const response = await fetch(TEST_URL)
+  //     const data = await response.json()
+  //     console.log(response)
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+  // }
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-  const handleDelete = () => {
-
+  const handleDelete = (e) => {
+    setIsShowAlert(false)
+    console.log(id)
+    // SendDeleteRequest()
     console.log('Delete')
+
   }
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    setIsShowEdit(true)
     console.log('Edit')
   }
   return (
@@ -110,15 +135,15 @@ export default function RecipeReviewCard () {
             123-456-789
           </Typography>
         </CardContent>
-        {/* <CardActions disableSpacing>
+        <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleAlertClick}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share" onClick={handleEdit}>
             <ShareIcon />
           </IconButton>
-          
-        </CardActions> */}
+
+        </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Method:</Typography>
@@ -157,21 +182,40 @@ export default function RecipeReviewCard () {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+          {"Delete this commodity?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            This operation is irreversible.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAlertClose}>Disagree</Button>
-          <Button onClick={handleAlertClose} autoFocus>
-            Agree
+          <Button onClick={handleAlertClose}>Cancel</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+        open={isShowEdit}
+        onClose={handleEditClick}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Edit Commodity"}
+        </DialogTitle>
+        <DialogContent>
+          <CommodityEditText></CommodityEditText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose}>Cancel</Button>
+          <Button onClick={handleEditClose} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
 
   )

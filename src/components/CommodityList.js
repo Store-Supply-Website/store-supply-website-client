@@ -5,18 +5,34 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
+
+//Diff from merge YT branch TBD
+// export default function TitlebarImageList () {
+//   const handleClick = (e) => {
+//     console.log(e.target)
+//   }
+//   return (
+//     <ImageList sx={{ width: 800, height: 1100, mx: 30 }}>
+
 import { useNavigate } from 'react-router-dom'
+import { StoreContext } from '../context/context'
+import { useState, useEffect, useContext } from "react"
 export default function TitlebarImageList () {
   const navigate = useNavigate()
+  const { user } = useContext(StoreContext)
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
   const handleClick = (e) => {
 
-    navigate('/detail')
+    //test user info
+    console.log(curUser)
+
+    navigate('/commodity/detail/101')
     console.log(e.target)
 
   }
   return (
     <ImageList sx={{ width: 0.5, height: 0.8 }}>
-      {/* <ImageListItem key="Subheader" cols={2}>
+      {/* <ImageListItem key="Subheader" c[]\ols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem> */}
 
