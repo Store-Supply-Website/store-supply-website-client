@@ -118,7 +118,7 @@
 
 // export default Update
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import FormControlLabel from "@mui/material/FormControlLabel"
@@ -140,20 +140,20 @@ import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
-import { Register_URL } from '../utils/api'
-import { StoreContext } from '../context/context'
 import { useContext } from "react"
+import { Register_URL, UPDATE_URL, LOGIN_URL } from '../utils/api'
+import { StoreContext } from '../context/context'
 
 const defaultValues = {
     userName: "",
     phone: "",
     address: "",
-    // age: "",
-    // gender: "",
-    // os: "",
-    // favoriteNumber: 0,
+    email: ""
 }
 const Update = () => {
+    const { user, setUser } = useContext(StoreContext)
+    // console.log('kkk')
+    // console.log(user)
     const [formValues, setFormValues] = useState(defaultValues)
     const curUser = JSON.parse(sessionStorage.getItem("user"))
     const handleInputChange = (e) => {
@@ -165,6 +165,8 @@ const Update = () => {
     }
 
     const handleSubmit = (event) => {
+        console.log('kkk')
+        console.log(user)
         event.preventDefault()
         console.log(curUser)
         const data = new FormData(event.currentTarget)
@@ -180,8 +182,9 @@ const Update = () => {
         //     return
         // }
         //SendRegisterRequest(data)
-        console.log(Register_URL)
-        getAllUser()
+        console.log(UPDATE_URL)
+        SendRegisterRequest(data)
+        // getAllUser()
     }
 
     const styles = {
@@ -191,19 +194,21 @@ const Update = () => {
     }
 
     const navigate = useNavigate()
-    const SendRegisterRequest = async (registerData) => {
+    const SendRegisterRequest = async (LoginData) => {
+
         try {
             //build post request params
             const params = {
                 method: 'POST',
-                body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
+                body: JSON.stringify({ id: LoginData.get('address') }),
                 headers: { 'Content-Type': 'application/json' },
             }
-            const createResponse = await fetch(Register_URL, params)
+            const createResponse = await fetch(UPDATE_URL, params)
             const newData = await createResponse.json()
             //process register request response
             const code = newData['status']
             if (code === 200) {
+                console.log("test1")
                 alert("Register successfully!")
             } else {
                 alert(newData['message'])
@@ -245,7 +250,7 @@ const Update = () => {
             <form margin="normal" onSubmit={handleSubmit} >
                 <Grid container margin="normal" spacing={2} alignItems="center" justify="center" direction="column">
                     <Grid item>
-                        <TextField margin="normal" required
+                        <TextField margin="normal"
                             id="name-input"
                             name="userName"
                             label="userName"
@@ -255,7 +260,7 @@ const Update = () => {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField required
+                        <TextField
                             id="phone-input"
                             name="phone"
                             label="phone"
@@ -275,7 +280,7 @@ const Update = () => {
                         </TextField>
                     </Grid>
                     <Grid item>
-                        <TextField required
+                        <TextField
                             id="address-input"
                             name="address"
                             label="address"

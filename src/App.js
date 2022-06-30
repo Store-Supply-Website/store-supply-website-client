@@ -12,6 +12,7 @@ import Detail from './pages/CommodityDetail'
 import Commodity from './pages/Commodity'
 import MyCommodity from './pages/MyCommodity'
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom'
+import SignIn from './components/SignIn'
 function App () {
   return (
     <BrowserRouter>
@@ -29,6 +30,8 @@ function App () {
         <Route path='/detail' element={<Detail />}></Route>
         <Route path='/commodity' element={<Commodity />}></Route>
         <Route path='/mycommodity' element={<MyCommodity />}></Route>
+        <Route path='/signin' element={<SignIn />}></Route>
+
       </Routes>
     </BrowserRouter>
   )
