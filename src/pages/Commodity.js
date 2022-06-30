@@ -9,8 +9,8 @@ function Commodity () {
 
       </header>
       <article>
-        <div className='flexbox-centering'>
-          <TitlebarImageList />
+        <div className='flexbox-centering' >
+          <TitlebarImageList isCom={true} isMy={false} />
         </div>
 
       </article>

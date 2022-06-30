@@ -10,18 +10,21 @@ const CommodityEditText = React.forwardRef((props, ref) => {
   const setTitle = props.setTitle
   const content = props.content
   const setContent = props.setContent
+  const setSelectedImage = props.setSelectedImage
+  const selectedImage = props.selectedImage
   // const [value, setValue] = React.useState("")
   // const handleChange = (event) => {
   //   setTitle(event.target.value)
   // }
   const handleTitleChange = (event) => {
-    console.log(event.target)
+    // console.log(event.target)
     setTitle(event.target.value)
   }
   const handleContentChange = (event) => {
-    console.log(event.target)
+    // console.log(event.target)
     setContent(event.target.value)
   }
+
   return (
     <Box
       component="form"
@@ -53,21 +56,7 @@ const CommodityEditText = React.forwardRef((props, ref) => {
           variant="filled"
         />
       </div>
-      {/* <div>
-        <TextField
-          id="Commodity_EditText_Content"
-          label="Description"
-          multiline
-          rows={4}
-          value={content}
-          onChange={handleContentChange}
-          variant="filled"
-        />
-      </div> */}
-      <CommodityImageCard></CommodityImageCard>
-      {/* <Stack spacing={2} direction="row" sx={{ ml: 9, mt: 2 }}>
-        <Button variant="outlined">Submit</Button>
-      </Stack> */}
+      <CommodityImageCard setSelectedImage={setSelectedImage} selectedImage={selectedImage}></CommodityImageCard>
     </Box>
   )
 })

@@ -12,11 +12,12 @@ import CommodityEditText from '../components/CommodityEditText'
 import { CREATE_COMMODITY_URL } from '../utils/api'
 import { useRef } from 'react'
 function MyCommodity () {
-  const childRef = useRef()
   const [title, setTitle] = React.useState("")
   const [content, setContent] = React.useState("")
   const [isShowAdd, setIsShowAdd] = React.useState(false)
+  const [selectedImage, setSelectedImage] = React.useState(null)
   const curUser = JSON.parse(sessionStorage.getItem("user"))
+  const isHome = false
   const handleAddFormClick = () => {
     // alert('Click')
     setIsShowAdd(true)
@@ -25,13 +26,14 @@ function MyCommodity () {
     // alert('Submit')
     setIsShowAdd(false)
 
-    const data = { user: curUser, commodityname: title, content: content }
-    console.log(title)
-    console.log(content)
-    // console.log(content.value)
-    console.log(data['user'])
-    console.log(data['commodityname'])
-    console.log(data['content'])
+    const data = { user: curUser, commodityname: title, content: content, file: selectedImage }
+    console.log(selectedImage)
+    // console.log(title)
+    // console.log(content)
+    // // console.log(content.value)
+    // console.log(data['user'])
+    // console.log(data['commodityname'])
+    // console.log(data['content'])
     SendAddCommodityRequest(data)
   }
 
@@ -43,9 +45,14 @@ function MyCommodity () {
     // supplier:req.body.user,
     // commodityname:req.body.commodityname,
     // content:req.body.content
-
+    console.log('send')
     try {
-      //build post request params
+      // build post request params
+      // const params = {
+      //   method: 'POST',
+      //   body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'], file: Data['file'] }),
+      //   headers: { 'Content-Type': 'application/json' },
+      // }
       const params = {
         method: 'POST',
         body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
@@ -55,6 +62,7 @@ function MyCommodity () {
       const newData = await createResponse.json()
       //process register request response
       const code = newData['status']
+      console.log(newData)
       if (code === 200) {
         alert("Create commodity successfully!")
 
@@ -76,10 +84,10 @@ function MyCommodity () {
       </header>
       <article>
         <div className='flexbox-centering'>
-          <Button variant="contained" onClick={handleAddFormClick}>Add new commodity</Button>
+          <Button sx={{ mt: 3 }} variant="contained" onClick={handleAddFormClick} >Add new commodity</Button>
         </div>
-        <div className='flexbox-centering'>
-          <TitlebarImageList />
+        <div className>
+          <TitlebarImageList isCom={false} isMy={true}> </TitlebarImageList>
         </div>
 
         <Dialog
@@ -92,7 +100,7 @@ function MyCommodity () {
             {"Edit Commodity"}
           </DialogTitle>
           <DialogContent>
-            <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} ></CommodityEditText>
+            <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} setSelectedImage={setSelectedImage} selectedImage={selectedImage}></CommodityEditText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleAddFormClose}>Cancel</Button>
@@ -101,8 +109,8 @@ function MyCommodity () {
             </Button>
           </DialogActions>
         </Dialog>
-      </article>
-    </div>
+      </article >
+    </div >
   )
 }
 export default MyCommodity

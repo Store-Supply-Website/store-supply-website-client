@@ -5,7 +5,8 @@ import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ListSubheader from '@mui/material/ListSubheader'
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
-
+import Button from '@mui/material/Button'
+import { Grid } from '@mui/material'
 //Diff from merge YT branch TBD
 // export default function TitlebarImageList () {
 //   const handleClick = (e) => {
@@ -18,9 +19,20 @@ import { useNavigate } from 'react-router-dom'
 import { StoreContext } from '../context/context'
 import { useState, useEffect, useContext } from "react"
 import { Home_COMMODITY_URL, Home_MYCOMMODITY_URL } from '../utils/api'
-export default function TitlebarImageList () {
+export default function TitlebarImageList (props) {
   const navigate = useNavigate()
   const { user } = useContext(StoreContext)
+  const [comData, setComData] = useState([])
+  const [loading, setLoading] = useState('')
+  const [myComData, setMyComData] = useState([])
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
+  const isMy = props.isMy
+  const isCom = props.isCom
+  // console.log(curUser)
+  var isLogin = false
+  if (curUser != undefined) {
+    isLogin = true
+  }
   useEffect(() => {
     async function SendCommodityRequest () {
 
@@ -31,10 +43,11 @@ export default function TitlebarImageList () {
         //process register request response
         const code = newData['status']
         if (code === 200) {
-          alert("Show commodity successfully!")
+          // alert("Show commodity successfully!")
           console.log(newData)
+          setComData(prev => [...newData['data']])
         } else {
-          alert(newData['message'])
+          // alert(newData['message'])
         }
 
       }
@@ -43,37 +56,73 @@ export default function TitlebarImageList () {
       }
     }
     SendCommodityRequest()
-  }, [])
-  const curUser = JSON.parse(sessionStorage.getItem("user"))
+    async function SendMyCommodityRequest (Data) {
 
-  const SendMyCommodityRequest = async (Data) => {
-    // supplier:req.body.user,
-    // commodityname:req.body.commodityname,
-    // content:req.body.content
-
-    try {
-      //build post request params
-      const params = {
-        method: 'POST',
-        body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
-        headers: { 'Content-Type': 'application/json' },
+      try {
+        //build post request params
+        const params = {
+          method: 'POST',
+          body: JSON.stringify({ id: Data['id'] }),
+          headers: { 'Content-Type': 'application/json' },
+        }
+        const createResponse = await fetch(Home_MYCOMMODITY_URL, params)
+        const newData = await createResponse.json()
+        //process register request response
+        const code = newData['status']
+        if (code === 200) {
+          // alert("get Mycommodity successfully!")
+          console.log(newData['data'])
+          setMyComData(prev => [...newData['data']])
+          console.log(myComData)
+        } else {
+          // alert(newData['message'])
+        }
       }
-      const createResponse = await fetch(Home_MYCOMMODITY_URL, params)
-      const newData = await createResponse.json()
-      //process register request response
-      const code = newData['status']
-      if (code === 200) {
-        alert("get commodity successfully!")
-        console.log(newData)
-      } else {
-        alert(newData['message'])
+      catch (e) {
+        console.log(e)
       }
+    }
+    if (isLogin) {
 
+      const reqData = { id: curUser['_id'] }
+      console.log(reqData)
+      SendMyCommodityRequest(reqData)
     }
-    catch (e) {
-      console.log(e)
-    }
-  }
+  }, [loading])
+
+  useEffect(() => {
+    console.log(myComData) // { num: 1 } 数据已更新
+  }, [myComData])
+  useEffect(() => {
+    console.log(comData) // { num: 1 } 数据已更新
+  }, [comData])
+  // const SendMyCommodityRequest = async (Data) => {
+  //   // supplier:req.body.user,
+  //   // commodityname:req.body.commodityname,
+  //   // content:req.body.content
+
+  //   try {
+  //     //build post request params
+  //     const params = {
+  //       method: 'POST',
+  //       body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
+  //       headers: { 'Content-Type': 'application/json' },
+  //     }
+  //     const createResponse = await fetch(Home_MYCOMMODITY_URL, params)
+  //     const newData = await createResponse.json()
+  //     //process register request response
+  //     const code = newData['status']
+  //     if (code === 200) {
+  //       // alert("get commodity successfully!")
+  //       console.log(newData)
+  //     } else {
+  //       alert(newData['message'])
+  //     }
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+  // }
   // const SendCommodityRequest = async () => {
 
   //   try {
@@ -104,35 +153,138 @@ export default function TitlebarImageList () {
 
   }
   return (
-    <ImageList sx={{ width: 0.5, height: 0.8 }}>
-      {/* <ImageListItem key="Subheader" c[]\ols={2}>
+    <>
+
+      {
+        isCom && (
+          <Grid container direction='column' alignItems='center' justify='center'>
+            <Button variant="text" alignItems="center" sx={{ mt: 3 }}>Popular items</Button>
+            {/* <ImageList sx={{ width: 0.5, height: 0.8 }}>
+              {comData.map((item) => (
+                <ImageListItem key={item.img}>
+                  <img
+                    src={`${'https://images.unsplash.com/photo-1551782450-a2132b4ba21d'}?w=248&fit=crop&auto=format`}
+                    srcSet={`${'https://images.unsplash.com/photo-1551782450-a2132b4ba21d'}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    alt={item.commodityname}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    title={item.commodityname}
+                    // subtitle={item.author}
+                    actionIcon={
+                      <IconButton
+                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                        aria-label={`info about ${item.title}`}
+                        onClick={(e) => {
+                          navigate('/commodity/detail/' + item._id)
+                          console.log(item._id)
+                        }}
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    }
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList> */}
+            <ImageList sx={{ width: 0.5, height: 0.8 }}>
+              {/* <ImageListItem key="Subheader" c[]\ols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem> */}
 
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          />
-          <ImageListItemBar
-            title={item.title}
-            subtitle={item.author}
-            actionIcon={
-              <IconButton
-                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                aria-label={`info about ${item.title}`}
-                onClick={handleClick}
-              >
-                <InfoIcon />
-              </IconButton>
-            }
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+              {itemData.map((item) => (
+                <ImageListItem key={item.img}>
+                  <img
+                    src={`${item.img}?w=248&fit=crop&auto=format`}
+                    srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    alt={item.title}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    title={item.title}
+                    subtitle={item.author}
+                    actionIcon={
+                      <IconButton
+                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                        aria-label={`info about ${item.title}`}
+                        onClick={handleClick}
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    }
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+
+          </Grid>)
+      }
+      {
+        isMy && isLogin && (<Grid container direction='column' alignItems='center' justify='center'>
+          <Button variant="text" alignItems="center" sx={{ mt: 3 }} >My items</Button>
+          {/* <ImageList sx={{ width: 0.5, height: 0.8 }}>
+            {myComData.map((item) => (
+              <ImageListItem key={item.img}>
+                <img
+                  src={`${'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'}?w=248&fit=crop&auto=format`}
+                  srcSet={`${'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.commodityname}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={item.commodityname}
+                  // subtitle={item.author}
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      aria-label={`info about ${item.title}`}
+                      onClick={(e) => {
+                        navigate('/commodity/detail/' + item._id)
+                        console.log(item._id)
+                      }}
+                    >
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            ))}
+          </ImageList> */}
+          <ImageList sx={{ width: 0.5, height: 0.8 }}>
+            {/* <ImageListItem key="Subheader" c[]\ols={2}>
+        <ListSubheader component="div">December</ListSubheader>
+      </ImageListItem> */}
+
+            {itemData.map((item) => (
+              <ImageListItem key={item.img}>
+                <img
+                  src={`${item.img}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={item.title}
+                  subtitle={item.author}
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      aria-label={`info about ${item.title}`}
+                      onClick={handleClick}
+                    >
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+          )
+        </Grid>)
+      }
+
+    </>
+
   )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
-const BASE_URL = 'http://127.0.0.1:5000'
-// const BASE_URL = 'https://cs5610project.herokuapp.com'
+// const BASE_URL = 'http://127.0.0.1:5000'
+const BASE_URL = 'https://cs5610project.herokuapp.com'
 // Login.js
 export const LOGIN_URL = BASE_URL + '/'
 
@@ -22,3 +22,4 @@ export const DElETE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/del
 export const UPDATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/update'
 export const CREATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/create'
 export const SEARCH_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity'
+export const Get_Detail_URL = BASE_URL + '/catalog' + '/commodity/:id'

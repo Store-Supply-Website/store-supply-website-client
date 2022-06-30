@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Button from '@mui/material/Button'
@@ -23,7 +25,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import CommodityEditText from './CommodityEditText'
 import { useSearchParams, useParams } from 'react-router-dom'
-import { DElETE_COMMODITY_URL, UPDATE_COMMODITY_URL } from '../utils/api'
+import { DElETE_COMMODITY_URL, Get_Detail_URL, UPDATE_COMMODITY_URL } from '../utils/api'
+import { useState, useEffect, useContext } from "react"
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -43,7 +46,10 @@ export default function RecipeReviewCard () {
   const [title, setTitle] = React.useState("")
   const [content, setContent] = React.useState("")
   const [isShowAdd, setIsShowAdd] = React.useState(false)
+  const [selectedImage, setSelectedImage] = React.useState(null)
   const curUser = JSON.parse(sessionStorage.getItem("user"))
+  const [curTitle, setCurTitle] = React.useState("")
+  const [curContent, setCurContent] = React.useState("")
   let params = useParams()
   let id = params.id
   const handleAlertClick = () => {
@@ -65,22 +71,52 @@ export default function RecipeReviewCard () {
     // alert('Submit')
     setIsShowEdit(false)
 
-    const data = { id: '62bd34d081080d1c554bfb08', commodityname: title, content: content }
+    const data = { id: '62bd34d081080d1c554bfb08', commodityname: title, content: content, file: selectedImage }
     console.log(title)
     console.log(content)
     // console.log(content.value)
-    console.log(data['user'])
     console.log(data['commodityname'])
     console.log(data['content'])
     SendEditCommodityRequest(data)
   }
+  useEffect(() => {
+    async function SendCommodityDetailRequest () {
+
+      try {
+
+        const response = await fetch(Get_Detail_URL + '/' + id)
+        const newData = await response.json()
+        //process register request response
+        const code = newData['status']
+        if (code === 200) {
+          // alert("Show commodity successfully!")
+          console.log(newData)
+          const data = newData['data']
+          // setComData(prev => [...newData['data']])
+          setCurTitle(data['commodityname'])
+          setCurContent(data['content'])
+          console.log(curTitle)
+        } else {
+          alert(newData['message'])
+        }
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    SendCommodityDetailRequest()
+  }, [])
+  useEffect(() => {
+    console.log(curTitle) // { num: 1 } 数据已更新
+  }, [curTitle])
   const SendEditCommodityRequest = async (Data) => {
     console.log('Send')
     try {
       //build post request params
       const params = {
         method: 'POST',
-        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'] }),
+        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'], file: Data['file'] }),
         headers: { 'Content-Type': 'application/json' },
       }
       const createResponse = await fetch(UPDATE_COMMODITY_URL, params)
@@ -129,7 +165,7 @@ export default function RecipeReviewCard () {
   const handleDelete = (e) => {
     setIsShowAlert(false)
     console.log('62bd34f781080d1c554bfb0c')
-    SendDeleteRequest('62bd34f781080d1c554bfb0c')
+    SendDeleteRequest(id)
     console.log('Delete')
 
   }
@@ -139,7 +175,7 @@ export default function RecipeReviewCard () {
   }
   return (
     <div className='flexbox-centering'>
-      <Card sx={{ width: 0.5, mt: 2 }}>
+      <Card sx={{ width: 600, mt: 2 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -161,18 +197,24 @@ export default function RecipeReviewCard () {
           alt="Paella dish"
         />
         <CardContent>
-          <Typography variant="h4">
+          {/* <Typography variant="h4">
             (This is static data, we will soon allow users to add goods)
-          </Typography>
+          </Typography> */}
 
           <Typography variant="h4">
             Mini Camera
           </Typography>
+          {/* <Typography variant="h4">
+            {curTitle}
+          </Typography> */}
           <Typography paragraph>
           </Typography>
           <Typography variant="h5">
             About this item:
           </Typography>
+          {/* <Typography paragraph>
+            {curContent}
+          </Typography> */}
           <Typography paragraph>
             - Monitor the inside of your home day and night with our 1080P HD indoor plug-in smart security camera with motion detection and two-way audio.
           </Typography>
@@ -196,10 +238,10 @@ export default function RecipeReviewCard () {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleAlertClick}>
-            <FavoriteIcon />
+            <DeleteIcon />
           </IconButton>
           <IconButton aria-label="share" onClick={handleEdit}>
-            <ShareIcon />
+            <EditIcon />
           </IconButton>
 
         </CardActions>
@@ -265,7 +307,7 @@ export default function RecipeReviewCard () {
           {"Edit Commodity"}
         </DialogTitle>
         <DialogContent>
-          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} ></CommodityEditText>
+          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} setSelectedImage={setSelectedImage} selectedImage={selectedImage}></CommodityEditText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
