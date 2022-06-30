@@ -151,8 +151,8 @@ const defaultValues = {
 }
 const Update = () => {
     const { user, setUser } = useContext(StoreContext)
-    console.log('kkk')
-    console.log(user)
+    // console.log('kkk')
+    // console.log(user)
     const [formValues, setFormValues] = useState(defaultValues)
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -163,6 +163,8 @@ const Update = () => {
     }
 
     const handleSubmit = (event) => {
+        console.log('kkk')
+        console.log(user)
         event.preventDefault()
         const data = new FormData(event.currentTarget)
         console.log({
@@ -195,7 +197,7 @@ const Update = () => {
             //build post request params
             const params = {
                 method: 'POST',
-                body: JSON.stringify({ email: LoginData.get('address') }),
+                body: JSON.stringify({ id: LoginData.get('address') }),
                 headers: { 'Content-Type': 'application/json' },
             }
             const createResponse = await fetch(UPDATE_URL, params)
