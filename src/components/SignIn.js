@@ -86,8 +86,11 @@ export default function SignIn () {
         sessionStorage.setItem('user', JSON.stringify(curUser))
         setUser(newData['data'])
         setLoginUser(newData['data'])
+
         console.log(user)
         navigate('/')
+        setUser(newData['data'])
+        // console.log(user)0f37fd85ccea859db8b11baccdbbd295beee284
       } else {
         alert(newData['message'])
       }

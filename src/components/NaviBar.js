@@ -9,7 +9,7 @@ export const NaviBar = () => {
     isLogin = true
   }
   var mycommodity = '/mycommodity'
-  var profile = '/profile'
+  var profile = '/user'
   if (!isLogin) {
     mycommodity = '/login'
     profile = '/login'

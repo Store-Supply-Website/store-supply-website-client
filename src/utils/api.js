@@ -15,7 +15,11 @@ export const TEST_URL = BASE_URL
 
 //update
 export const UPDATE_URL = BASE_URL + '/catalog' + '/supplier/update'
+//search commodity by id
+export const SEARCH_URL = BASE_URL + '/catalog' + '/supplierdetail'
+
 //commodity
+
 export const Home_COMMODITY_URL = BASE_URL + '/catalog' + '/homepage'
 export const Home_MYCOMMODITY_URL = BASE_URL + '/catalog' + '/homepagelist'
 export const DElETE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/delete'
@@ -23,3 +27,4 @@ export const UPDATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/upd
 export const CREATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/create'
 export const SEARCH_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity'
 export const Get_Detail_URL = BASE_URL + '/catalog' + '/commodity/:id'
+
