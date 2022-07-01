@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography'
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Button from '@mui/material/Button'
@@ -23,6 +25,14 @@ import DialogTitle from '@mui/material/DialogTitle'
 
 import CommodityEditText from './CommodityEditText'
 import { useSearchParams, useParams } from 'react-router-dom'
+import { DElETE_COMMODITY_URL, Get_Detail_URL, UPDATE_COMMODITY_URL } from '../utils/api'
+import { useState, useEffect, useContext } from "react"
+import { useNavigate } from 'react-router-dom'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app"
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -35,12 +45,45 @@ const ExpandMore = styled((props) => {
 }))
 
 export default function RecipeReviewCard () {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = React.useState(false)
   const [isShowAlert, setIsShowAlert] = React.useState(false)
   const [isShowEdit, setIsShowEdit] = React.useState(false)
-  let params = useParams()
-  let id = params.id
+
+  const [title, setTitle] = React.useState("")
+  const [content, setContent] = React.useState("")
+  const [isShowAdd, setIsShowAdd] = React.useState(false)
+  const [selectedImage, setSelectedImage] = React.useState(null)
+  const [imageUrl, setImageUrl] = useState(null)
+  const [progresspercent, setProgresspercent] = useState(0)
+  const curUser = JSON.parse(sessionStorage.getItem("user"))
+  const [curTitle, setCurTitle] = React.useState("")
+  const [curContent, setCurContent] = React.useState("")
+  const [curImageUrl, setCurImageUrl] = React.useState(null)
+  const [supplierName, setSupplierName] = React.useState("")
+  const [supplierContact, setSupplierContact] = React.useState("")
+  const [date, setDate] = React.useState("")
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVBLrWPMdRe4QSJb1fRqvZVN0OPYY6Nrk",
+    authDomain: "cs5610-5ea7c.firebaseapp.com",
+    projectId: "cs5610-5ea7c",
+    storageBucket: "cs5610-5ea7c.appspot.com",
+    messagingSenderId: "410462085853",
+    appId: "1:410462085853:web:d7b4f6dd2d6968339df134"
+  }
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig)
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+  const storage = getStorage(app)
+
+  let [params] = useSearchParams()
+  let id = params.get('id')
+  let uid = params.get('uid')
+  // console.log(id)
+  // console.log(uid)
   const handleAlertClick = () => {
+
     setIsShowAlert(true)
   }
 
@@ -54,23 +97,140 @@ export default function RecipeReviewCard () {
   const handleEditClose = () => {
     setIsShowEdit(false)
   }
-  // const SendDeleteRequest = async () => {
-  //   try {
-  //     const response = await fetch(TEST_URL)
-  //     const data = await response.json()
-  //     console.log(response)
-  //   }
-  //   catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  const handleEditFormSubmit = () => {
+    if (!title || title === '' || title == undefined) {
+      alert('Please enter the title of your commodity')
+      return
+    }
+    if (!content || content === '' || content == undefined) {
+      alert('Please enter the description of your commodity')
+      return
+    }
+    if (!selectedImage) {
+      alert('Please selected image')
+      return
+    }
+    setIsShowEdit(false)
+    uploadImageToFirebase()
+
+
+  }
+  useEffect(() => {
+    async function SendCommodityDetailRequest () {
+
+      try {
+        //build post request params
+        const params = {
+          method: 'POST',
+          body: JSON.stringify({ commodityid: id, supplierid: uid }),
+          headers: { 'Content-Type': 'application/json' },
+        }
+        const response = await fetch(Get_Detail_URL, params)
+        const newData = await response.json()
+        const code = newData['status']
+
+        console.log(newData)
+        if (code === 200) {
+          const data = newData.data.commodity
+
+          setCurTitle(data.commodityname)
+          setCurContent(data['content'])
+          setCurImageUrl(data.imgUrl)
+          setDate(data.date)
+          setSupplierName(newData.data.supplier.username)
+          setSupplierContact(newData.data.supplier.email)
+        } else {
+          alert(newData['message'])
+        }
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    SendCommodityDetailRequest()
+  }, [])
+  useEffect(() => {
+    console.log(curTitle) // { num: 1 } 数据已更新
+  }, [curTitle])
+  const uploadImageToFirebase = async () => {
+
+    // Create a storage reference from our storage service
+    const storageRef = ref(storage, 'images/' + selectedImage.name)
+    const uploadTask = uploadBytesResumable(storageRef, selectedImage)
+    uploadTask.on("state_changed",
+      (snapshot) => {
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        setProgresspercent(progress)
+      },
+      (error) => {
+        alert(error)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageUrl(downloadURL)
+          const data = { id: id, commodityname: title, content: content, imgUrl: downloadURL }
+          console.log(data)
+          SendEditCommodityRequest(data)
+        })
+      }
+
+    )
+  }
+  const SendEditCommodityRequest = async (Data) => {
+    try {
+      //build post request params
+      const params = {
+        method: 'POST',
+        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'], imgUrl: Data.imgUrl }),
+        headers: { 'Content-Type': 'application/json' },
+      }
+      const createResponse = await fetch(UPDATE_COMMODITY_URL, params)
+      const newData = await createResponse.json()
+      const code = newData['status']
+      console.log(newData)
+      if (code === 200) {
+        alert('Update successfully')
+        navigate('/')
+      } else {
+        alert(newData['message'])
+      }
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+  const SendDeleteRequest = async (commodityID) => {
+    try {
+      //build post request params
+      const params = {
+        method: 'POST',
+        body: JSON.stringify({ id: commodityID }),
+        headers: { 'Content-Type': 'application/json' },
+      }
+      const createResponse = await fetch(DElETE_COMMODITY_URL, params)
+      const newData = await createResponse.json()
+      const code = newData['status']
+      if (code === 200) {
+        alert('Delete successfully')
+        //delete successfully, redirect to homepage
+        navigate('/')
+      } else {
+        alert(newData['message'])
+      }
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
   const handleDelete = (e) => {
     setIsShowAlert(false)
-    console.log(id)
-    // SendDeleteRequest()
+    console.log('62bd34f781080d1c554bfb0c')
+    SendDeleteRequest(id)
     console.log('Delete')
 
   }
@@ -80,11 +240,11 @@ export default function RecipeReviewCard () {
   }
   return (
     <div className='flexbox-centering'>
-      <Card sx={{ width: 0.5, mt: 2 }}>
+      <Card sx={{ width: 600, mt: 2 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+              {supplierName[0]}
             </Avatar>
           }
           // action={
@@ -92,22 +252,22 @@ export default function RecipeReviewCard () {
           //     <MoreVertIcon />
           //   </IconButton>
           // }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={supplierName}
+          subheader={date}
         />
         <CardMedia
           component="img"
           height="194"
-          image="https://m.media-amazon.com/images/I/51nZZn3MymL._SX425_.jpg"
-          alt="Paella dish"
+          image={curImageUrl}
+          alt="Broken Image"
         />
         <CardContent>
-          <Typography variant="h4">
+          {/* <Typography variant="h4">
             (This is static data, we will soon allow users to add goods)
-          </Typography>
+          </Typography> */}
 
           <Typography variant="h4">
-            Mini Camera
+            {curTitle}
           </Typography>
           <Typography paragraph>
           </Typography>
@@ -115,6 +275,9 @@ export default function RecipeReviewCard () {
             About this item:
           </Typography>
           <Typography paragraph>
+            {curContent}
+          </Typography>
+          {/* <Typography paragraph>
             - Monitor the inside of your home day and night with our 1080P HD indoor plug-in smart security camera with motion detection and two-way audio.
           </Typography>
           <Typography paragraph>
@@ -125,22 +288,22 @@ export default function RecipeReviewCard () {
           </Typography>
           <Typography paragraph>
             - Use Mini as an indoor plug-in chime for Blink Video Doorbell. Hear a real-time alert from Mini when someone presses your Video Doorbell.
-          </Typography>
+          </Typography> */}
           <Typography paragraph>
           </Typography>
           <Typography variant="h5">
             Contact provider:
           </Typography>
           <Typography paragraph>
-            123-456-789
+            {supplierContact}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleAlertClick}>
-            <FavoriteIcon />
+            <DeleteIcon />
           </IconButton>
           <IconButton aria-label="share" onClick={handleEdit}>
-            <ShareIcon />
+            <EditIcon />
           </IconButton>
 
         </CardActions>
@@ -186,7 +349,7 @@ export default function RecipeReviewCard () {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This operation is irreversible.
+            Warning: This operation is irreversible.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -206,11 +369,11 @@ export default function RecipeReviewCard () {
           {"Edit Commodity"}
         </DialogTitle>
         <DialogContent>
-          <CommodityEditText></CommodityEditText>
+          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} setSelectedImage={setSelectedImage} selectedImage={selectedImage} imageUrl={imageUrl} setImageUrl={setImageUrl}></CommodityEditText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
-          <Button onClick={handleEditClose} autoFocus>
+          <Button onClick={handleEditFormSubmit} autoFocus>
             Confirm
           </Button>
         </DialogActions>

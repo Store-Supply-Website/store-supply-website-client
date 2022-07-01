@@ -22,7 +22,7 @@ function Copyright (props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Online Store Supply
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -56,6 +56,7 @@ export default function SignUp () {
       const code = newData['status']
       if (code === 200) {
         alert("Register successfully!")
+
       } else {
         alert(newData['message'])
       }

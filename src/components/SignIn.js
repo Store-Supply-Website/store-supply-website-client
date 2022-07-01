@@ -23,7 +23,7 @@ function Copyright (props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Online Store Supply
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -88,9 +88,9 @@ export default function SignIn () {
         setLoginUser(newData['data'])
 
         console.log(user)
+        navigate('/')
         setUser(newData['data'])
-        // console.log(user)
-        navigate('/home')
+        // console.log(user)0f37fd85ccea859db8b11baccdbbd295beee284
       } else {
         alert(newData['message'])
       }
