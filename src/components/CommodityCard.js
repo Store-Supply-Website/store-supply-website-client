@@ -59,7 +59,10 @@ export default function RecipeReviewCard () {
   const curUser = JSON.parse(sessionStorage.getItem("user"))
   const [curTitle, setCurTitle] = React.useState("")
   const [curContent, setCurContent] = React.useState("")
-  const [curImageUrl, setCurImageUrl] = useState(null)
+  const [curImageUrl, setCurImageUrl] = React.useState(null)
+  const [supplierName, setSupplierName] = React.useState("")
+  const [supplierContact, setSupplierContact] = React.useState("")
+  const [date, setDate] = React.useState("")
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyDVBLrWPMdRe4QSJb1fRqvZVN0OPYY6Nrk",
@@ -74,8 +77,11 @@ export default function RecipeReviewCard () {
   // Get a reference to the storage service, which is used to create references in your storage bucket
   const storage = getStorage(app)
 
-  let params = useParams()
-  let id = params.id
+  let [params] = useSearchParams()
+  let id = params.get('id')
+  let uid = params.get('uid')
+  // console.log(id)
+  // console.log(uid)
   const handleAlertClick = () => {
 
     setIsShowAlert(true)
@@ -113,16 +119,26 @@ export default function RecipeReviewCard () {
     async function SendCommodityDetailRequest () {
 
       try {
-
-        const response = await fetch(Get_Detail_URL + '/' + id)
+        //build post request params
+        const params = {
+          method: 'POST',
+          body: JSON.stringify({ commodityid: id, supplierid: uid }),
+          headers: { 'Content-Type': 'application/json' },
+        }
+        const response = await fetch(Get_Detail_URL, params)
         const newData = await response.json()
         const code = newData['status']
+
+        console.log(newData)
         if (code === 200) {
-          const data = newData['data']
-          setCurTitle(data['commodityname'])
+          const data = newData.data.commodity
+
+          setCurTitle(data.commodityname)
           setCurContent(data['content'])
           setCurImageUrl(data.imgUrl)
-          console.log(data.imgUrl)
+          setDate(data.date)
+          setSupplierName(newData.data.supplier.username)
+          setSupplierContact(newData.data.supplier.email)
         } else {
           alert(newData['message'])
         }
@@ -226,7 +242,7 @@ export default function RecipeReviewCard () {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+              {supplierName[0]}
             </Avatar>
           }
           // action={
@@ -234,14 +250,14 @@ export default function RecipeReviewCard () {
           //     <MoreVertIcon />
           //   </IconButton>
           // }
-          title={curTitle}
-          subheader="September 14, 2016"
+          title={supplierName}
+          subheader={date}
         />
         <CardMedia
           component="img"
           height="194"
           image={curImageUrl}
-          alt="Paella dish"
+          alt="Broken Image"
         />
         <CardContent>
           {/* <Typography variant="h4">
@@ -277,7 +293,7 @@ export default function RecipeReviewCard () {
             Contact provider:
           </Typography>
           <Typography paragraph>
-            123-456-789
+            {supplierContact}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>

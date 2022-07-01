@@ -24,7 +24,7 @@ function App () {
         <Route path='/' element={<Home />}></Route>
         <Route path='/register' element={<Register />}></Route>
         <Route path='/profile' element={<Profile />}></Route>
-        <Route path='/commodity/detail/:id' element={<Detail />}></Route>
+        <Route path='/commodity/detail/' element={<Detail />}></Route>
         <Route path='/update' element={<Up_Info />}></Route>
         <Route path='/user' element={<User />}></Route>
         <Route path='/detail' element={<Detail />}></Route>

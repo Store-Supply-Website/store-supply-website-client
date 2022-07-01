@@ -129,7 +129,7 @@ export default function TitlebarImageList (props) {
                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                         aria-label={`info about ${item.title}`}
                         onClick={(e) => {
-                          navigate('/commodity/detail/' + item._id)
+                          navigate('/commodity/detail?id=' + item._id + '&uid=' + item.supplier)
                           console.log(item._id)
                         }}
                       >
@@ -163,8 +163,8 @@ export default function TitlebarImageList (props) {
                       sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                       aria-label={`info about ${item.title}`}
                       onClick={(e) => {
-                        navigate('/commodity/detail/' + item._id)
-                        console.log(item._id)
+                        navigate('/commodity/detail?id=' + item._id + '&uid=' + item.supplier)
+                        // console.log(item._id)
                       }}
                     >
                       <InfoIcon />
