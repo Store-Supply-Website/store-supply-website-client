@@ -12,6 +12,8 @@ const CommodityEditText = React.forwardRef((props, ref) => {
   const setContent = props.setContent
   const setSelectedImage = props.setSelectedImage
   const selectedImage = props.selectedImage
+  const imageUrl = props.imageUrl
+  const setImageUrl = props.setImageUrl
   // const [value, setValue] = React.useState("")
   // const handleChange = (event) => {
   //   setTitle(event.target.value)
@@ -50,13 +52,13 @@ const CommodityEditText = React.forwardRef((props, ref) => {
           id="Commodity_EditText_Content"
           label="Description"
           multiline
-          maxRows={4}
+          rows={4}
           value={content}
           onChange={handleContentChange}
           variant="filled"
         />
       </div>
-      <CommodityImageCard setSelectedImage={setSelectedImage} selectedImage={selectedImage}></CommodityImageCard>
+      <CommodityImageCard setSelectedImage={setSelectedImage} selectedImage={selectedImage} imageUrl={imageUrl} setImageUrl={setImageUrl}></CommodityImageCard>
     </Box>
   )
 })

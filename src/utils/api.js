@@ -26,5 +26,5 @@ export const DElETE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/del
 export const UPDATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/update'
 export const CREATE_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity' + '/create'
 export const SEARCH_COMMODITY_URL = BASE_URL + '/catalog' + '/commodity'
-export const Get_Detail_URL = BASE_URL + '/catalog' + '/commodity/:id'
+export const Get_Detail_URL = BASE_URL + '/catalog' + '/commodity' + '/detail'
 

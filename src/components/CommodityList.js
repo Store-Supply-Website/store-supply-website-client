@@ -34,20 +34,21 @@ export default function TitlebarImageList (props) {
     isLogin = true
   }
   useEffect(() => {
+
+    //fetch common commodity info
     async function SendCommodityRequest () {
-
       try {
-
         const response = await fetch(Home_COMMODITY_URL)
         const newData = await response.json()
         //process register request response
+        console.log(newData)
         const code = newData['status']
         if (code === 200) {
-          // alert("Show commodity successfully!")
           console.log(newData)
           setComData(prev => [...newData['data']])
         } else {
           // alert(newData['message'])
+          console.log(newData['message'])
         }
 
       }
@@ -56,6 +57,8 @@ export default function TitlebarImageList (props) {
       }
     }
     SendCommodityRequest()
+
+    //fetch my commodity info
     async function SendMyCommodityRequest (Data) {
 
       try {
@@ -70,12 +73,10 @@ export default function TitlebarImageList (props) {
         //process register request response
         const code = newData['status']
         if (code === 200) {
-          // alert("get Mycommodity successfully!")
-          console.log(newData['data'])
           setMyComData(prev => [...newData['data']])
-          console.log(myComData)
         } else {
           // alert(newData['message'])
+          console.log(newData['message'])
         }
       }
       catch (e) {
@@ -83,68 +84,20 @@ export default function TitlebarImageList (props) {
       }
     }
     if (isLogin) {
-
       const reqData = { id: curUser['_id'] }
       console.log(reqData)
       SendMyCommodityRequest(reqData)
     }
-  }, [loading])
+  }, [])
 
   useEffect(() => {
-    console.log(myComData) // { num: 1 } 数据已更新
+    console.log(myComData)
   }, [myComData])
   useEffect(() => {
-    console.log(comData) // { num: 1 } 数据已更新
+    console.log(comData)
   }, [comData])
-  // const SendMyCommodityRequest = async (Data) => {
-  //   // supplier:req.body.user,
-  //   // commodityname:req.body.commodityname,
-  //   // content:req.body.content
 
-  //   try {
-  //     //build post request params
-  //     const params = {
-  //       method: 'POST',
-  //       body: JSON.stringify({ user: Data['user'], commodityname: Data['commodityname'], content: Data['content'] }),
-  //       headers: { 'Content-Type': 'application/json' },
-  //     }
-  //     const createResponse = await fetch(Home_MYCOMMODITY_URL, params)
-  //     const newData = await createResponse.json()
-  //     //process register request response
-  //     const code = newData['status']
-  //     if (code === 200) {
-  //       // alert("get commodity successfully!")
-  //       console.log(newData)
-  //     } else {
-  //       alert(newData['message'])
-  //     }
-  //   }
-  //   catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-  // const SendCommodityRequest = async () => {
-
-  //   try {
-
-  //     const response = await fetch(Home_COMMODITY_URL)
-  //     const newData = await response.json()
-  //     //process register request response
-  //     const code = newData['status']
-  //     if (code === 200) {
-  //       alert("Create commodity successfully!")
-  //       console.log(newData)
-  //     } else {
-  //       alert(newData['message'])
-  //     }
-
-  //   }
-  //   catch (e) {
-  //     console.log(e)
-  //   }
-  // }
   const handleClick = (e) => {
-
     //test user info
     console.log(curUser)
 
@@ -158,13 +111,13 @@ export default function TitlebarImageList (props) {
       {
         isCom && (
           <Grid container direction='column' alignItems='center' justify='center'>
-            <Button variant="text" alignItems="center" sx={{ mt: 3 }}>Popular items</Button>
-            {/* <ImageList sx={{ width: 0.5, height: 0.8 }}>
+            <Button variant="text" sx={{ mt: 3 }}>Popular items</Button>
+            <ImageList sx={{ width: 0.5, height: 0.8 }}>
               {comData.map((item) => (
-                <ImageListItem key={item.img}>
+                <ImageListItem key={item.imgUrl}>
                   <img
-                    src={`${'https://images.unsplash.com/photo-1551782450-a2132b4ba21d'}?w=248&fit=crop&auto=format`}
-                    srcSet={`${'https://images.unsplash.com/photo-1551782450-a2132b4ba21d'}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${item.imgUrl}?w=248&fit=crop&auto=format`}
+                    srcSet={`${item.imgUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.commodityname}
                     loading="lazy"
                   />
@@ -186,48 +139,19 @@ export default function TitlebarImageList (props) {
                   />
                 </ImageListItem>
               ))}
-            </ImageList> */}
-            <ImageList sx={{ width: 0.5, height: 0.8 }}>
-              {/* <ImageListItem key="Subheader" c[]\ols={2}>
-        <ListSubheader component="div">December</ListSubheader>
-      </ImageListItem> */}
-
-              {itemData.map((item) => (
-                <ImageListItem key={item.img}>
-                  <img
-                    src={`${item.img}?w=248&fit=crop&auto=format`}
-                    srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.title}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    title={item.title}
-                    subtitle={item.author}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                        aria-label={`info about ${item.title}`}
-                        onClick={handleClick}
-                      >
-                        <InfoIcon />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-              ))}
             </ImageList>
 
           </Grid>)
       }
       {
         isMy && isLogin && (<Grid container direction='column' alignItems='center' justify='center'>
-          <Button variant="text" alignItems="center" sx={{ mt: 3 }} >My items</Button>
-          {/* <ImageList sx={{ width: 0.5, height: 0.8 }}>
+          <Button variant="text" sx={{ mt: 3 }} >My items</Button>
+          <ImageList sx={{ width: 0.5, height: 0.8 }}>
             {myComData.map((item) => (
-              <ImageListItem key={item.img}>
+              <ImageListItem key={'My' + item.imgUrl}>
                 <img
-                  src={`${'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'}?w=248&fit=crop&auto=format`}
-                  srcSet={`${'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${item.imgUrl}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item.imgUrl}?w=248&fit=crop&auto=format&dpr=2 2x`}
                   alt={item.commodityname}
                   loading="lazy"
                 />
@@ -249,37 +173,7 @@ export default function TitlebarImageList (props) {
                 />
               </ImageListItem>
             ))}
-          </ImageList> */}
-          <ImageList sx={{ width: 0.5, height: 0.8 }}>
-            {/* <ImageListItem key="Subheader" c[]\ols={2}>
-        <ListSubheader component="div">December</ListSubheader>
-      </ImageListItem> */}
-
-            {itemData.map((item) => (
-              <ImageListItem key={item.img}>
-                <img
-                  src={`${item.img}?w=248&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-                <ImageListItemBar
-                  title={item.title}
-                  subtitle={item.author}
-                  actionIcon={
-                    <IconButton
-                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                      aria-label={`info about ${item.title}`}
-                      onClick={handleClick}
-                    >
-                      <InfoIcon />
-                    </IconButton>
-                  }
-                />
-              </ImageListItem>
-            ))}
           </ImageList>
-          )
         </Grid>)
       }
 

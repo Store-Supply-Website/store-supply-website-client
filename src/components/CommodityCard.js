@@ -27,6 +27,12 @@ import CommodityEditText from './CommodityEditText'
 import { useSearchParams, useParams } from 'react-router-dom'
 import { DElETE_COMMODITY_URL, Get_Detail_URL, UPDATE_COMMODITY_URL } from '../utils/api'
 import { useState, useEffect, useContext } from "react"
+import { useNavigate } from 'react-router-dom'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app"
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -39,6 +45,7 @@ const ExpandMore = styled((props) => {
 }))
 
 export default function RecipeReviewCard () {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = React.useState(false)
   const [isShowAlert, setIsShowAlert] = React.useState(false)
   const [isShowEdit, setIsShowEdit] = React.useState(false)
@@ -47,9 +54,26 @@ export default function RecipeReviewCard () {
   const [content, setContent] = React.useState("")
   const [isShowAdd, setIsShowAdd] = React.useState(false)
   const [selectedImage, setSelectedImage] = React.useState(null)
+  const [imageUrl, setImageUrl] = useState(null)
+  const [progresspercent, setProgresspercent] = useState(0)
   const curUser = JSON.parse(sessionStorage.getItem("user"))
   const [curTitle, setCurTitle] = React.useState("")
   const [curContent, setCurContent] = React.useState("")
+  const [curImageUrl, setCurImageUrl] = useState(null)
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVBLrWPMdRe4QSJb1fRqvZVN0OPYY6Nrk",
+    authDomain: "cs5610-5ea7c.firebaseapp.com",
+    projectId: "cs5610-5ea7c",
+    storageBucket: "cs5610-5ea7c.appspot.com",
+    messagingSenderId: "410462085853",
+    appId: "1:410462085853:web:d7b4f6dd2d6968339df134"
+  }
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig)
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+  const storage = getStorage(app)
+
   let params = useParams()
   let id = params.id
   const handleAlertClick = () => {
@@ -68,16 +92,22 @@ export default function RecipeReviewCard () {
     setIsShowEdit(false)
   }
   const handleEditFormSubmit = () => {
-    // alert('Submit')
+    if (!title || title === '' || title == undefined) {
+      alert('Please enter the title of your commodity')
+      return
+    }
+    if (!content || content === '' || content == undefined) {
+      alert('Please enter the description of your commodity')
+      return
+    }
+    if (!selectedImage) {
+      alert('Please selected image')
+      return
+    }
     setIsShowEdit(false)
+    uploadImageToFirebase()
 
-    const data = { id: '62bd34d081080d1c554bfb08', commodityname: title, content: content, file: selectedImage }
-    console.log(title)
-    console.log(content)
-    // console.log(content.value)
-    console.log(data['commodityname'])
-    console.log(data['content'])
-    SendEditCommodityRequest(data)
+
   }
   useEffect(() => {
     async function SendCommodityDetailRequest () {
@@ -86,16 +116,13 @@ export default function RecipeReviewCard () {
 
         const response = await fetch(Get_Detail_URL + '/' + id)
         const newData = await response.json()
-        //process register request response
         const code = newData['status']
         if (code === 200) {
-          // alert("Show commodity successfully!")
-          console.log(newData)
           const data = newData['data']
-          // setComData(prev => [...newData['data']])
           setCurTitle(data['commodityname'])
           setCurContent(data['content'])
-          console.log(curTitle)
+          setCurImageUrl(data.imgUrl)
+          console.log(data.imgUrl)
         } else {
           alert(newData['message'])
         }
@@ -110,26 +137,47 @@ export default function RecipeReviewCard () {
   useEffect(() => {
     console.log(curTitle) // { num: 1 } 数据已更新
   }, [curTitle])
+  const uploadImageToFirebase = async () => {
+
+    // Create a storage reference from our storage service
+    const storageRef = ref(storage, 'images/' + selectedImage.name)
+    const uploadTask = uploadBytesResumable(storageRef, selectedImage)
+    uploadTask.on("state_changed",
+      (snapshot) => {
+        const progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        setProgresspercent(progress)
+      },
+      (error) => {
+        alert(error)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageUrl(downloadURL)
+          const data = { user: curUser, commodityname: title, content: content, imgUrl: downloadURL }
+          SendEditCommodityRequest(data)
+        })
+      }
+
+    )
+  }
   const SendEditCommodityRequest = async (Data) => {
-    console.log('Send')
     try {
       //build post request params
       const params = {
         method: 'POST',
-        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'], file: Data['file'] }),
+        body: JSON.stringify({ id: Data['id'], commodityname: Data['commodityname'], content: Data['content'], imgUrl: Data.imgUrl }),
         headers: { 'Content-Type': 'application/json' },
       }
       const createResponse = await fetch(UPDATE_COMMODITY_URL, params)
       const newData = await createResponse.json()
-      //process register request response
       const code = newData['status']
       if (code === 200) {
-        alert("Create commodity successfully!")
-
+        alert('Update successfully')
+        navigate('/')
       } else {
         alert(newData['message'])
       }
-      console.log(newData)
     }
     catch (e) {
       console.log(e)
@@ -145,15 +193,14 @@ export default function RecipeReviewCard () {
       }
       const createResponse = await fetch(DElETE_COMMODITY_URL, params)
       const newData = await createResponse.json()
-      //process register request response
       const code = newData['status']
       if (code === 200) {
-        alert("Delete commodity successfully!")
-
+        alert('Delete successfully')
+        //delete successfully, redirect to homepage
+        navigate('/')
       } else {
         alert(newData['message'])
       }
-      console.log(newData)
     }
     catch (e) {
       console.log(e)
@@ -187,13 +234,13 @@ export default function RecipeReviewCard () {
           //     <MoreVertIcon />
           //   </IconButton>
           // }
-          title="helloimnik"
+          title={curTitle}
           subheader="September 14, 2016"
         />
         <CardMedia
           component="img"
           height="194"
-          image="https://images.unsplash.com/photo-1522770179533-24471fcdba45"
+          image={curImageUrl}
           alt="Paella dish"
         />
         <CardContent>
@@ -202,20 +249,17 @@ export default function RecipeReviewCard () {
           </Typography> */}
 
           <Typography variant="h4">
-            Camera
-          </Typography>
-          {/* <Typography variant="h4">
             {curTitle}
-          </Typography> */}
+          </Typography>
           <Typography paragraph>
           </Typography>
           <Typography variant="h5">
             About this item:
           </Typography>
-          {/* <Typography paragraph>
-            {curContent}
-          </Typography> */}
           <Typography paragraph>
+            {curContent}
+          </Typography>
+          {/* <Typography paragraph>
             - Monitor the inside of your home day and night with our 1080P HD indoor plug-in smart security camera with motion detection and two-way audio.
           </Typography>
           <Typography paragraph>
@@ -226,7 +270,7 @@ export default function RecipeReviewCard () {
           </Typography>
           <Typography paragraph>
             - Use Mini as an indoor plug-in chime for Blink Video Doorbell. Hear a real-time alert from Mini when someone presses your Video Doorbell.
-          </Typography>
+          </Typography> */}
           <Typography paragraph>
           </Typography>
           <Typography variant="h5">
@@ -287,7 +331,7 @@ export default function RecipeReviewCard () {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This operation is irreversible.
+            Warning: This operation is irreversible.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -307,7 +351,7 @@ export default function RecipeReviewCard () {
           {"Edit Commodity"}
         </DialogTitle>
         <DialogContent>
-          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} setSelectedImage={setSelectedImage} selectedImage={selectedImage}></CommodityEditText>
+          <CommodityEditText title={title} setTitle={setTitle} content={content} setContent={setContent} setSelectedImage={setSelectedImage} selectedImage={selectedImage} imageUrl={imageUrl} setImageUrl={setImageUrl}></CommodityEditText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>

@@ -5,7 +5,9 @@ import { useState, useEffect } from "react"
 const CommodityImageCard = (props) => {
   const setSelectedImage = props.setSelectedImage
   const selectedImage = props.selectedImage
-  const [imageUrl, setImageUrl] = useState(null)
+  const imageUrl = props.imageUrl
+  const setImageUrl = props.setImageUrl
+
 
   useEffect(() => {
     if (selectedImage) {
