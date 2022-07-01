@@ -170,7 +170,8 @@ export default function RecipeReviewCard () {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageUrl(downloadURL)
-          const data = { user: curUser, commodityname: title, content: content, imgUrl: downloadURL }
+          const data = { id: id, commodityname: title, content: content, imgUrl: downloadURL }
+          console.log(data)
           SendEditCommodityRequest(data)
         })
       }
@@ -188,6 +189,7 @@ export default function RecipeReviewCard () {
       const createResponse = await fetch(UPDATE_COMMODITY_URL, params)
       const newData = await createResponse.json()
       const code = newData['status']
+      console.log(newData)
       if (code === 200) {
         alert('Update successfully')
         navigate('/')
