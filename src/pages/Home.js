@@ -10,8 +10,8 @@ function Home () {
 
       </header>
       <article>
-        <div className='flexbox-centering'>
-          <TitlebarImageList />
+        <div>
+          <TitlebarImageList isCom={true} isMy={true} />
         </div>
       </article>
     </div>

@@ -118,7 +118,7 @@
 
 // export default Update
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import FormControlLabel from "@mui/material/FormControlLabel"
@@ -140,20 +140,19 @@ import ReactPhoneInput from 'react-phone-input-material-ui'
 import { Tabs, Tab } from '@mui/material'
 import Phone from './Phone'
 import { useNavigate } from 'react-router-dom'
-import { Register_URL } from '../utils/api'
-
+import { Register_URL, UPDATE_URL, LOGIN_URL } from '../utils/api'
+import { StoreContext } from '../context/context'
 
 const defaultValues = {
     userName: "",
     phone: "",
     address: "",
-    // age: "",
-    // gender: "",
-    // os: "",
-    // favoriteNumber: 0,
+    email: ""
 }
 const Update = () => {
+    const { user, setUser } = useContext(StoreContext)
     const [formValues, setFormValues] = useState(defaultValues)
+    const curUser = JSON.parse(sessionStorage.getItem("user"))
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormValues({
@@ -177,8 +176,9 @@ const Update = () => {
         //     return
         // }
         //SendRegisterRequest(data)
-        console.log(Register_URL)
-        getAllUser()
+        console.log(UPDATE_URL)
+        SendRegisterRequest(data)
+        // getAllUser()
     }
 
     const styles = {
@@ -188,20 +188,28 @@ const Update = () => {
     }
 
     const navigate = useNavigate()
-    const SendRegisterRequest = async (registerData) => {
+    const SendRegisterRequest = async (LoginData) => {
+        const curUser = sessionStorage.getItem('user')
+        const curUserObj = JSON.parse(curUser)
+        const curId = curUserObj._id
+        console.log(curId)
         try {
             //build post request params
             const params = {
                 method: 'POST',
-                body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
+                body: JSON.stringify({ id: curId, address: LoginData.get('address'), phone: LoginData.get('phone') }),
                 headers: { 'Content-Type': 'application/json' },
             }
-            const createResponse = await fetch(Register_URL, params)
+
+            const createResponse = await fetch(UPDATE_URL, params)
             const newData = await createResponse.json()
             //process register request response
             const code = newData['status']
             if (code === 200) {
-                alert("Register successfully!")
+                console.log("test1")
+                alert("Update successfully!")
+                navigate('/user')
+
             } else {
                 alert(newData['message'])
             }
@@ -212,29 +220,6 @@ const Update = () => {
         }
     }
 
-    //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-
-    const getAllUser = async () => {
-        const data = { phone: 'z z' }
-        // const params = {
-        //     method: 'GET',
-        //     body: JSON.stringify({ username: registerData.get('userName') + " " + registerData.get('phone'), email: registerData.get('address'), password: registerData.get('phone') }),
-        //     headers: { 'Content-Type': 'application/json' },
-        // }
-        // const createResponse = await fetch(Register_URL + '?username=${encodeURIComponent(data.userName)}', { method: 'GET' })
-        const createResponse = await fetch('https://cs5610project.herokuapp.com', { method: 'GET' })
-        console.log(await createResponse)
-        // const newData = await createResponse.json()
-    }
-    // const getAllUser = async () => {
-    //     const response = await fetch("/get")
-    //     response.json().then((res) => setUsers(res.data.userName))
-    //     console.log(userName)
-    // }
-
-    useEffect(() => {
-        getAllUser()
-    }, [])
 
     return (
         <>
@@ -242,7 +227,7 @@ const Update = () => {
             <form margin="normal" onSubmit={handleSubmit} >
                 <Grid container margin="normal" spacing={2} alignItems="center" justify="center" direction="column">
                     <Grid item>
-                        <TextField margin="normal" required
+                        <TextField margin="normal"
                             id="name-input"
                             name="userName"
                             label="userName"
@@ -252,7 +237,7 @@ const Update = () => {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField required
+                        <TextField
                             id="phone-input"
                             name="phone"
                             label="phone"
@@ -263,16 +248,6 @@ const Update = () => {
                     </Grid>
                     <Grid item>
                         <TextField
-                            id="phone-input"
-                            name="phone"
-                            label="phone"
-                            type="text"
-                        >
-                            <Phone></Phone>
-                        </TextField>
-                    </Grid>
-                    <Grid item>
-                        <TextField required
                             id="address-input"
                             name="address"
                             label="address"
@@ -289,8 +264,6 @@ const Update = () => {
                 </Grid>
             </form>
 
-            <Phone>
-            </Phone>
 
         </>
 
