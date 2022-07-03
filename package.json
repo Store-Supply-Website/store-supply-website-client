@@ -2,6 +2,10 @@
   "name": "store-supply-website-client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.14.2",
+    "npm": "8.5.0"
+  },
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
