@@ -16,10 +16,7 @@ import SignIn from './components/SignIn'
 function App () {
   return (
     <BrowserRouter>
-      {/* <Link to="/" className="link">HomePage</Link>
-      <Link to="/profile" className="link">Profile</Link> */}
       <Routes>
-        {/* <Route path='/' element={<Login />}></Route> */}
         <Route path='/login' element={<Login />}></Route>
         <Route path='/' element={<Home />}></Route>
         <Route path='/register' element={<Register />}></Route>

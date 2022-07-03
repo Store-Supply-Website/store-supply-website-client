@@ -11,7 +11,7 @@ function Home () {
       </header>
       <article>
         <div>
-          {/* <TitlebarImageList isCom={true} isMy={true} /> */}
+          <TitlebarImageList isCom={true} isMy={true} />
         </div>
       </article>
     </div>

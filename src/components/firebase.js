@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
-import { getStorage, ref } from "firebase/storage"
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,6 +21,9 @@ const db = getFirestore(app)
 const storage = getStorage(firebaseApp)
 // Create a storage reference from our storage service
 const storageRef = ref(storage)
+// Create a child reference
+const imagesRef = ref(storage, 'images')
+// imagesRef now points to 'images'
 
 // Get a list of cities from your database
 async function getCities (db) {
